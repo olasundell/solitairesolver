@@ -11,9 +11,11 @@ public class Card {
 
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(suit.shortName());
 
 		switch (rank) {
+		case 1:
+			builder.append('A');
+			break;
 		case 10:
 			builder.append('T');
 			break;
@@ -30,6 +32,8 @@ public class Card {
 			builder.append(rank);
 		}
 
+		builder.append(suit.shortName());
+
 		return builder.toString();
 	}
 
@@ -43,5 +47,18 @@ public class Card {
 
 	public Suit getSuit() {
 		return suit;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Card card = (Card) o;
+
+		if (rank != card.rank) return false;
+		if (suit != card.suit) return false;
+
+		return true;
 	}
 }

@@ -2,7 +2,7 @@ package se.atrosys.solitaire.cardstuff.piles.pilerules;
 
 import se.atrosys.solitaire.cardstuff.Card;
 
-public class SameSuitAscendingRule implements Rule {
+public class SameSuitAscendingAceFirstRule implements Rule {
 	@Override
 	public boolean eligible(Card existing, Card intended) {
 		// TODO this should be handled more gracefully

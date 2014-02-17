@@ -1,9 +1,12 @@
 package se.atrosys.solitaire.cardstuff.piles;
 
 import se.atrosys.solitaire.cardstuff.Card;
+import se.atrosys.solitaire.cardstuff.EmptyDeckException;
+import se.atrosys.solitaire.cardstuff.piles.pilerules.NoRule;
 import se.atrosys.solitaire.cardstuff.piles.pilerules.Rule;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Pile {
@@ -12,6 +15,7 @@ public class Pile {
 
 	public Pile() {
 		cards = new ArrayList<>();
+		rule = new NoRule();
 	}
 
 	public Pile withRule(Rule rule) {
@@ -24,18 +28,27 @@ public class Pile {
 		cards.addAll(several);
 	}
 
-	private Card peek() {
-		return cards.get(0);
+	public Card peek() {
+		if (cards.isEmpty()) {
+			return null;
+		}
+
+		return cards.get(cards.size() -1);
 	}
 
-	private Card take() {
-		return cards.remove(0);
+	public Card take() {
+		if (cards.isEmpty()) {
+			return null;
+		}
+
+		return cards.remove(cards.size() -1);
 	}
 
-	public void addCard(Card card) {
-		// you can always add a card if the pile is empty.
+	public void addCard(Card card) throws IneligibleCardException {
 		if (rule.eligible(this.peek(), card)) {
 			cards.add(card);
+		} else {
+			throw new IneligibleCardException(String.format("Tried to add %s to %s, pile is %s", card, this.peek(), this));
 		}
 	}
 
@@ -48,5 +61,17 @@ public class Pile {
 		}
 
 		return builder.toString();
+	}
+
+	public void clear() {
+		cards.clear();
+	}
+
+	public Rule getRule() {
+		return rule;
+	}
+
+	public List<Card> getCards() {
+		return Collections.unmodifiableList(cards);
 	}
 }

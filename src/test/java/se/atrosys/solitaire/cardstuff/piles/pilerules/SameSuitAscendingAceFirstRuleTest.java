@@ -5,8 +5,8 @@ import org.testng.annotations.Test;
 import se.atrosys.solitaire.cardstuff.Card;
 import se.atrosys.solitaire.cardstuff.Suit;
 
-public class SameSuitAscendingRuleTest {
-	SameSuitAscendingRule rule = new SameSuitAscendingRule();
+public class SameSuitAscendingAceFirstRuleTest {
+	SameSuitAscendingAceFirstRule rule = new SameSuitAscendingAceFirstRule();
 
 	@Test
 	public void differentSuitsAndAdjacentNumbersShouldNotWork() throws Exception {
