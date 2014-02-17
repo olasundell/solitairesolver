@@ -8,6 +8,9 @@ repositories {
 }
 
 dependencies {
+	compile 'ch.qos.logback:logback-core:+'
+	compile 'ch.qos.logback:logback-classic:+'
+	compile 'org.slf4j:slf4j-api:+'
     testCompile 'org.testng:testng:+'
 }
 

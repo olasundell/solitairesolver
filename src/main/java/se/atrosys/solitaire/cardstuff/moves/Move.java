@@ -1,9 +1,9 @@
-package se.atrosys.solitaire.cardstuff;
+package se.atrosys.solitaire.cardstuff.moves;
 
+import se.atrosys.solitaire.cardstuff.Card;
 import se.atrosys.solitaire.cardstuff.piles.Pile;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Move {

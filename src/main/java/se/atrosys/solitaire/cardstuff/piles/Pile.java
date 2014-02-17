@@ -12,14 +12,30 @@ import java.util.List;
 public class Pile {
 	private final List<Card> cards;
 	private Rule rule;
+	private boolean topOnly;
+	private boolean takeOnly;
 
 	public Pile() {
 		cards = new ArrayList<>();
 		rule = new NoRule();
+		topOnly = false;
+		takeOnly = false;
 	}
 
 	public Pile withRule(Rule rule) {
 		this.rule = rule;
+
+		return this;
+	}
+
+	public Pile withTakeOnly() {
+		takeOnly = true;
+
+		return this;
+	}
+
+	public Pile withTopOnly() {
+		topOnly = true;
 
 		return this;
 	}
@@ -73,5 +89,13 @@ public class Pile {
 
 	public List<Card> getCards() {
 		return Collections.unmodifiableList(cards);
+	}
+
+	public boolean isTopOnly() {
+		return topOnly;
+	}
+
+	public boolean isTakeOnly() {
+		return takeOnly;
 	}
 }
