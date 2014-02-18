@@ -13,23 +13,22 @@ public class Pile {
 	private final List<Card> cards;
 	private Rule rule;
 	private boolean topOnly;
-	private boolean takeOnly;
+	private String name;
 
 	public Pile() {
 		cards = new ArrayList<>();
 		rule = new NoRule();
 		topOnly = false;
-		takeOnly = false;
 	}
 
-	public Pile withRule(Rule rule) {
-		this.rule = rule;
+	public Pile withName(String name) {
+		this.name = name;
 
 		return this;
 	}
 
-	public Pile withTakeOnly() {
-		takeOnly = true;
+	public Pile withRule(Rule rule) {
+		this.rule = rule;
 
 		return this;
 	}
@@ -60,9 +59,13 @@ public class Pile {
 		return cards.remove(cards.size() -1);
 	}
 
+	public void dealCard(Card card) {
+		cards.add(card);
+	}
+
 	public void addCard(Card card) throws IneligibleCardException {
 		if (rule.eligible(this.peek(), card)) {
-			cards.add(card);
+			dealCard(card);
 		} else {
 			throw new IneligibleCardException(String.format("Tried to add %s to %s, pile is %s", card, this.peek(), this));
 		}
@@ -71,9 +74,13 @@ public class Pile {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 
-		for (Card card: cards) {
-			builder.append(card.toString());
-			builder.append(" ");
+		if (name != null && !name.isEmpty()) {
+			builder.append(name);
+		} else {
+			for (Card card: cards) {
+				builder.append(card.toString());
+				builder.append(" ");
+			}
 		}
 
 		return builder.toString();
@@ -95,7 +102,7 @@ public class Pile {
 		return topOnly;
 	}
 
-	public boolean isTakeOnly() {
-		return takeOnly;
+	public void dealCards(List<Card> cards) {
+		this.cards.addAll(cards);
 	}
 }

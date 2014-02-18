@@ -10,9 +10,9 @@ import se.atrosys.solitaire.cardstuff.moves.MoveFinder;
 import se.atrosys.solitaire.cardstuff.piles.Pile;
 import se.atrosys.solitaire.cardstuff.piles.pilerules.AlternatingColorDescendingRule;
 import se.atrosys.solitaire.cardstuff.piles.pilerules.SameSuitAscendingAceFirstRule;
+import se.atrosys.solitaire.cardstuff.piles.pilerules.TakeOnlyRule;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Canfield {
 	private final MoveFinder moveFinder = new MoveFinder();
@@ -35,12 +35,12 @@ public class Canfield {
 	private void createPiles() {
 		foundations = new ArrayList<>();
 		tableaux = new ArrayList<>();
-		reserve = new Pile().withTakeOnly().withTopOnly();
-		stock = new Pile().withTakeOnly();
+		reserve = new Pile().withTopOnly().withName("reserve").withRule(new TakeOnlyRule());
+		stock = new Pile().withName("stock").withRule(new TakeOnlyRule());
 
 		for (int i = 0 ; i < 4 ; i++) {
-			foundations.add(new Pile().withRule(new SameSuitAscendingAceFirstRule()));
-			tableaux.add(new Pile().withRule(new AlternatingColorDescendingRule()));
+			foundations.add(new Pile().withRule(new SameSuitAscendingAceFirstRule()).withName("foundation"+i).withTopOnly());
+			tableaux.add(new Pile().withRule(new AlternatingColorDescendingRule()).withName("tableaux"+i));
 		}
 	}
 
@@ -49,22 +49,24 @@ public class Canfield {
 
 		for (int i = 0 ; i < 4 ; i++) {
 			try {
-				tableaux.get(i).addCard(deck.takeNext());
-			} catch (EmptyDeckException | IneligibleCardException e) {
+				tableaux.get(i).dealCard(deck.takeNext());
+			} catch (EmptyDeckException e) {
 				logger.warn("Could not add card to tableaux", e);
 			}
 		}
 
-		stock.addCards(deck.takeRemaining());
+		stock.dealCards(deck.takeRemaining());
 	}
 
 	public List<Move> getAvailableMoves() {
-		List<Move> moves = new ArrayList<>();
+		Set<Move> moves = new HashSet<>();
 
 		moves.addAll(getTableauInternalMoves());
 		moves.addAll(getTableauExternalMoves());
+		moves.addAll(getReserveMoves());
+		moves.addAll(getStockMoves());
 
-		return moves;
+		return new ArrayList<>(moves);
 	}
 
 	// TODO this method doesn't work very well if the pile list is empty.
@@ -97,5 +99,31 @@ public class Canfield {
 
 	public List<Pile> getTableaux() {
 		return tableaux;
+	}
+
+	protected List<Move> getReserveMoves() {
+		ArrayList<Move> moves = new ArrayList<>();
+		for (Pile tableau: getTableaux()) {
+			moves.addAll(moveFinder.getMovesFromPiles(reserve, tableau));
+		}
+
+		for (Pile foundation: foundations) {
+			moves.addAll(moveFinder.getMovesFromPiles(reserve, foundation));
+		}
+
+		return moves;
+	}
+
+	protected List<Move> getStockMoves() {
+		ArrayList<Move> moves = new ArrayList<>();
+		for (Pile tableau: getTableaux()) {
+			moves.addAll(moveFinder.getMovesFromPiles(stock, tableau));
+		}
+
+		for (Pile foundation: foundations) {
+			moves.addAll(moveFinder.getMovesFromPiles(stock, foundation));
+		}
+
+		return moves;
 	}
 }

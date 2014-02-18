@@ -11,6 +11,10 @@ public class AlternatingColorDescendingRule implements Rule {
 			return true;
 		}
 
+		if (intended == null) {
+			return false;
+		}
+
 		if (existing.getColor() == intended.getColor()) {
 			return false;
 		}

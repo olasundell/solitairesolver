@@ -19,13 +19,10 @@ public class MoveFinder {
 		// FIXME this -must- handle Pile.topOnly()
 		if (firstPile.isTopOnly() || secondPile.isTopOnly()) {
 			moves.addAll(topMove(firstPile, secondPile));
+			moves.addAll(topMove(secondPile, firstPile));
 		} else {
-			if (!secondPile.isTakeOnly()) {
-				moves.addAll(iterate(firstPile, secondPile));
-			}
-			if (!firstPile.isTakeOnly()) {
-				moves.addAll(iterate(secondPile, firstPile));
-			}
+			moves.addAll(iterate(firstPile, secondPile));
+			moves.addAll(iterate(secondPile, firstPile));
 		}
 
 		return new ArrayList<>(moves);
@@ -36,11 +33,11 @@ public class MoveFinder {
 		Card firstCard = firstPile.peek();
 		Card secondCard = secondPile.peek();
 
-		if (!firstPile.isTakeOnly() && firstPile.getRule().eligible(firstCard, secondCard)) {
+		if (firstPile.getRule().eligible(firstCard, secondCard)) {
 			moves.add(new Move(secondPile, firstPile, secondCard));
 		}
 
-		if (!secondPile.isTakeOnly() && secondPile.getRule().eligible(secondCard, firstCard)) {
+		if (secondPile.getRule().eligible(secondCard, firstCard)) {
 			moves.add(new Move(firstPile, secondPile, firstCard));
 		}
 
@@ -49,7 +46,7 @@ public class MoveFinder {
 
 	protected Set<Move> iterate(Pile firstPile, Pile secondPile) {
 		List<Card> firstPileCards = firstPile.getCards();
-		Rule rule = firstPile.getRule();
+		Rule rule = secondPile.getRule();
 		Set<Move> moves = new HashSet<>();
 
 		for (int k = 0; k < firstPileCards.size(); k++) {

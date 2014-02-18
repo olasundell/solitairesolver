@@ -9,7 +9,9 @@ import se.atrosys.solitaire.cardstuff.Suit;
 import se.atrosys.solitaire.cardstuff.moves.MoveFinder;
 import se.atrosys.solitaire.cardstuff.piles.pilerules.AlternatingColorDescendingRule;
 import se.atrosys.solitaire.cardstuff.piles.pilerules.SameSuitAscendingAceFirstRule;
+import se.atrosys.solitaire.cardstuff.piles.pilerules.TakeOnlyRule;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class MoveFinderTest {
@@ -48,25 +50,6 @@ public class MoveFinderTest {
 		Assert.assertEquals(secondCard, move.getCard());
 		Assert.assertEquals(second, move.getFrom());
 		Assert.assertEquals(first, move.getTo());
-	}
-
-	@Test
-	public void takeOnlyShouldBeHonored() throws IneligibleCardException {
-		Pile first = new Pile().withRule(new AlternatingColorDescendingRule()).withTakeOnly();
-		Pile second = new Pile().withRule(new AlternatingColorDescendingRule());
-
-		Card firstCard = new Card(Suit.CLUBS, 4);
-		first.addCard(firstCard);
-		Card secondCard = new Card(Suit.DIAMONDS, 3);
-		second.addCard(secondCard);
-
-		List<Move> moves = moveFinder.getMovesFromPiles(first, second);
-
-		Assert.assertEquals(0, moves.size());
-//		Move move = moves.get(0);
-//		Assert.assertEquals(secondCard, move.getCard());
-//		Assert.assertEquals(second, move.getFrom());
-//		Assert.assertEquals(first, move.getTo());
 	}
 
 	@Test
@@ -185,5 +168,18 @@ public class MoveFinderTest {
 		Assert.assertEquals(first, move.getFrom());
 		Assert.assertEquals(second, move.getTo());
 		Assert.assertEquals(0, move.getFollowers().size());
+	}
+
+	@Test
+	public void moveWithTakeOnlyAndNoTopOnly() {
+		Pile first = new Pile().withRule(new AlternatingColorDescendingRule());
+		Pile second = new Pile().withRule(new TakeOnlyRule());
+
+		first.dealCard(new Card(Suit.CLUBS, 10));
+		second.dealCards(Arrays.asList(new Card(Suit.CLUBS, 9), new Card(Suit.HEARTS, 8), new Card(Suit.DIAMONDS, 9)));
+
+		List<Move> moves = moveFinder.getMovesFromPiles(first, second);
+
+		Assert.assertEquals(1, moves.size());
 	}
 }

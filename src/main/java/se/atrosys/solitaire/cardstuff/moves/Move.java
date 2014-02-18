@@ -43,6 +43,19 @@ public class Move {
 	}
 
 	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(from.toString());
+		builder.append(" -> ");
+		builder.append(card.toString());
+		builder.append(" -> ");
+		builder.append(to.toString());
+
+		return builder.toString();
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;

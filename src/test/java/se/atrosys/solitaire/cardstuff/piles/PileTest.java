@@ -6,6 +6,7 @@ import se.atrosys.solitaire.cardstuff.Card;
 import se.atrosys.solitaire.cardstuff.Suit;
 import se.atrosys.solitaire.cardstuff.piles.pilerules.AlternatingColorDescendingRule;
 import se.atrosys.solitaire.cardstuff.piles.pilerules.Rule;
+import se.atrosys.solitaire.cardstuff.piles.pilerules.SameSuitAscendingAceFirstRule;
 
 public class PileTest {
 	@Test
@@ -27,5 +28,38 @@ public class PileTest {
 		});
 
 		pile.addCard(new Card(Suit.CLUBS, 1));
+	}
+
+	@Test
+	public void aceFirstShouldWork() throws IneligibleCardException {
+		Pile pile = new Pile().withRule(new SameSuitAscendingAceFirstRule());
+		pile.addCard(new Card(Suit.CLUBS, 1));
+	}
+
+	@Test
+	public void twoSecondShouldWork() throws IneligibleCardException {
+		Pile pile = new Pile().withRule(new SameSuitAscendingAceFirstRule());
+		pile.addCard(new Card(Suit.CLUBS, 1));
+		pile.addCard(new Card(Suit.CLUBS, 2));
+	}
+
+	@Test(expectedExceptions = IneligibleCardException.class)
+	public void nonAceFirstShouldNotWork() throws IneligibleCardException {
+		Pile pile = new Pile().withRule(new SameSuitAscendingAceFirstRule());
+		pile.addCard(new Card(Suit.CLUBS, 2));
+	}
+
+	@Test(expectedExceptions = IneligibleCardException.class)
+	public void nonTwoSecondShouldNotWork() throws IneligibleCardException {
+		Pile pile = new Pile().withRule(new SameSuitAscendingAceFirstRule());
+		pile.addCard(new Card(Suit.CLUBS, 1));
+		pile.addCard(new Card(Suit.CLUBS, 3));
+	}
+
+	@Test(expectedExceptions = IneligibleCardException.class)
+	public void differentSuitSecondShouldNotWork() throws IneligibleCardException {
+		Pile pile = new Pile().withRule(new SameSuitAscendingAceFirstRule());
+		pile.addCard(new Card(Suit.CLUBS, 1));
+		pile.addCard(new Card(Suit.SPADES, 2));
 	}
 }

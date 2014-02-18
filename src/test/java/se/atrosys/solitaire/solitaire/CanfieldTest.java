@@ -1,6 +1,7 @@
 package se.atrosys.solitaire.solitaire;
 
 import org.junit.Assert;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import se.atrosys.solitaire.cardstuff.Card;
@@ -12,6 +13,7 @@ import java.util.List;
 
 public class CanfieldTest {
 	Canfield canfield;
+	private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@BeforeMethod
 	public void setup() throws Exception {
@@ -23,10 +25,13 @@ public class CanfieldTest {
 		List<Move> moves = canfield.getAvailableMoves();
 
 		Assert.assertNotNull(moves);
+		for (Move move: moves) {
+			Assert.assertTrue(move.getTo().getRule().eligible(move.getTo().peek(), move.getCard()));
+		}
 	}
 
 	@Test
-	public void tableauMovesShouldWork() throws IneligibleCardException {
+	public void tableauInternalMovesShouldWork() throws IneligibleCardException {
 		for (int i = 0 ; i < 4 ; i++) {
 			canfield.getTableaux().get(i).clear();
 		}
