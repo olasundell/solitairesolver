@@ -16,17 +16,18 @@ import java.util.List;
 
 public class MoveFinderTest {
 	MoveFinder moveFinder;
+	private Pile first;
+	private Pile second;
 
 	@BeforeMethod
 	public void setUp() throws Exception {
 		moveFinder = new MoveFinder();
+		first = new Pile(PileType.TABLEAU);
+		second = new Pile(PileType.TABLEAU);
 	}
 
 	@Test
 	public void movesShouldBeEmptyWithNoCards() {
-		Pile first = new Pile().withRule(new AlternatingColorDescendingRule());
-		Pile second = new Pile().withRule(new AlternatingColorDescendingRule());
-
 		List<Move> moves = moveFinder.getMovesFromPiles(first, second);
 
 		Assert.assertNotNull(moves);
@@ -35,9 +36,6 @@ public class MoveFinderTest {
 
 	@Test
 	public void shouldFindSimpleMove() throws IneligibleCardException {
-		Pile first = new Pile().withRule(new AlternatingColorDescendingRule());
-		Pile second = new Pile().withRule(new AlternatingColorDescendingRule());
-
 		Card firstCard = new Card(Suit.CLUBS, 4);
 		first.addCard(firstCard);
 		Card secondCard = new Card(Suit.DIAMONDS, 3);
@@ -54,9 +52,6 @@ public class MoveFinderTest {
 
 	@Test
 	public void shouldFindSimpleReversedMove() throws IneligibleCardException {
-		Pile first = new Pile().withRule(new AlternatingColorDescendingRule());
-		Pile second = new Pile().withRule(new AlternatingColorDescendingRule());
-
 		Card firstCard = new Card(Suit.DIAMONDS, 3);
 		first.addCard(firstCard);
 		Card secondCard = new Card(Suit.CLUBS, 4);
@@ -73,9 +68,6 @@ public class MoveFinderTest {
 
 	@Test
 	public void shouldFindSlightlyMoreComplexCase() throws IneligibleCardException {
-		Pile first = new Pile().withRule(new AlternatingColorDescendingRule());
-		Pile second = new Pile().withRule(new AlternatingColorDescendingRule());
-
 		Card firstCard = new Card(Suit.CLUBS, 4);
 		first.addCard(firstCard);
 		Card secondCard = new Card(Suit.DIAMONDS, 3);
@@ -95,9 +87,6 @@ public class MoveFinderTest {
 
 	@Test
 	public void shouldFindDeepMove() throws IneligibleCardException {
-		Pile first = new Pile().withRule(new AlternatingColorDescendingRule());
-		Pile second = new Pile().withRule(new AlternatingColorDescendingRule());
-
 		Card firstCard = new Card(Suit.CLUBS, 4);
 		first.addCard(firstCard);
 		Card secondCard = new Card(Suit.DIAMONDS, 3);
@@ -121,9 +110,6 @@ public class MoveFinderTest {
 
 	@Test
 	public void shouldFindDeepMoveOtherWay() throws IneligibleCardException {
-		Pile first = new Pile().withRule(new AlternatingColorDescendingRule());
-		Pile second = new Pile().withRule(new AlternatingColorDescendingRule());
-
 		Card firstCard = new Card(Suit.CLUBS, 4);
 		second.addCard(firstCard);
 		Card secondCard = new Card(Suit.DIAMONDS, 3);
@@ -147,8 +133,7 @@ public class MoveFinderTest {
 
 	@Test
 	public void moveWithDifferentRulesAndTopOnly() throws IneligibleCardException {
-		Pile first = new Pile().withRule(new AlternatingColorDescendingRule());
-		Pile second = new Pile().withRule(new SameSuitAscendingAceFirstRule()).withTopOnly();
+		second = new Pile(PileType.FOUNDATION);
 
 		Card firstCard = new Card(Suit.CLUBS, 4);
 		first.addCard(firstCard);
@@ -172,8 +157,7 @@ public class MoveFinderTest {
 
 	@Test
 	public void moveWithTakeOnlyAndNoTopOnly() {
-		Pile first = new Pile().withRule(new AlternatingColorDescendingRule());
-		Pile second = new Pile().withRule(new TakeOnlyRule());
+		second = new Pile(PileType.RESERVE);
 
 		first.dealCard(new Card(Suit.CLUBS, 10));
 		second.dealCards(Arrays.asList(new Card(Suit.CLUBS, 9), new Card(Suit.HEARTS, 8), new Card(Suit.DIAMONDS, 9)));

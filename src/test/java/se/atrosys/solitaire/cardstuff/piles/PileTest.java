@@ -11,7 +11,7 @@ import se.atrosys.solitaire.cardstuff.piles.pilerules.SameSuitAscendingAceFirstR
 public class PileTest {
 	@Test
 	public void cardsShouldBeAddedCorrectly() throws IneligibleCardException {
-		Pile pile = new Pile().withRule(new AlternatingColorDescendingRule());
+		Pile pile = new Pile(PileType.TABLEAU);
 		pile.addCard(new Card(Suit.CLUBS, 10));
 		pile.addCard(new Card(Suit.DIAMONDS, 9));
 		pile.addCard(new Card(Suit.CLUBS, 8));
@@ -20,45 +20,40 @@ public class PileTest {
 	}
 	@Test(expectedExceptions = IneligibleCardException.class)
 	public void shouldThrowException() throws IneligibleCardException {
-		Pile pile = new Pile().withRule(new Rule() {
-			@Override
-			public boolean eligible(Card existing, Card intended) {
-				return false;
-			}
-		});
+		Pile pile = new Pile(PileType.STOCK);
 
 		pile.addCard(new Card(Suit.CLUBS, 1));
 	}
 
 	@Test
 	public void aceFirstShouldWork() throws IneligibleCardException {
-		Pile pile = new Pile().withRule(new SameSuitAscendingAceFirstRule());
+		Pile pile = new Pile(PileType.FOUNDATION);
 		pile.addCard(new Card(Suit.CLUBS, 1));
 	}
 
 	@Test
 	public void twoSecondShouldWork() throws IneligibleCardException {
-		Pile pile = new Pile().withRule(new SameSuitAscendingAceFirstRule());
+		Pile pile = new Pile(PileType.FOUNDATION);
 		pile.addCard(new Card(Suit.CLUBS, 1));
 		pile.addCard(new Card(Suit.CLUBS, 2));
 	}
 
 	@Test(expectedExceptions = IneligibleCardException.class)
 	public void nonAceFirstShouldNotWork() throws IneligibleCardException {
-		Pile pile = new Pile().withRule(new SameSuitAscendingAceFirstRule());
+		Pile pile = new Pile(PileType.FOUNDATION);
 		pile.addCard(new Card(Suit.CLUBS, 2));
 	}
 
 	@Test(expectedExceptions = IneligibleCardException.class)
 	public void nonTwoSecondShouldNotWork() throws IneligibleCardException {
-		Pile pile = new Pile().withRule(new SameSuitAscendingAceFirstRule());
+		Pile pile = new Pile(PileType.FOUNDATION);
 		pile.addCard(new Card(Suit.CLUBS, 1));
 		pile.addCard(new Card(Suit.CLUBS, 3));
 	}
 
 	@Test(expectedExceptions = IneligibleCardException.class)
 	public void differentSuitSecondShouldNotWork() throws IneligibleCardException {
-		Pile pile = new Pile().withRule(new SameSuitAscendingAceFirstRule());
+		Pile pile = new Pile(PileType.FOUNDATION);
 		pile.addCard(new Card(Suit.CLUBS, 1));
 		pile.addCard(new Card(Suit.SPADES, 2));
 	}

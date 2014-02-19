@@ -10,6 +10,7 @@ import se.atrosys.solitaire.cardstuff.Suit;
 import se.atrosys.solitaire.cardstuff.piles.IneligibleCardException;
 
 import java.util.List;
+import java.util.Set;
 
 public class CanfieldTest {
 	Canfield canfield;
@@ -22,7 +23,7 @@ public class CanfieldTest {
 
 	@Test
 	public void availableMovesShouldNotBeNull() {
-		List<Move> moves = canfield.getAvailableMoves();
+		Set<Move> moves = canfield.getAvailableMoves();
 
 		Assert.assertNotNull(moves);
 		for (Move move: moves) {
@@ -45,5 +46,22 @@ public class CanfieldTest {
 
 		Assert.assertNotNull(moves);
 		Assert.assertEquals(2, moves.size());
+	}
+
+	@Test
+	public void shouldPruneFoundationMoves() {
+		Set<Move> moves = canfield.getAvailableMoves();
+
+		Set<Move> prunedMoves = canfield.pruneMovesToFoundations(moves);
+
+		Assert.assertNotNull(prunedMoves);
+		Assert.assertFalse(prunedMoves.isEmpty());
+
+		int numberOfFoundationMoves = 0;
+
+		for (Move move: prunedMoves) {
+//			if (move.getTo().)
+//			numberOfFoundationMoves
+		}
 	}
 }

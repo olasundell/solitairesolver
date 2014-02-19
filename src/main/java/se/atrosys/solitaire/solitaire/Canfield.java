@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import se.atrosys.solitaire.cardstuff.Deck;
 import se.atrosys.solitaire.cardstuff.EmptyDeckException;
 import se.atrosys.solitaire.cardstuff.moves.Move;
-import se.atrosys.solitaire.cardstuff.piles.IneligibleCardException;
 import se.atrosys.solitaire.cardstuff.moves.MoveFinder;
 import se.atrosys.solitaire.cardstuff.piles.Pile;
+import se.atrosys.solitaire.cardstuff.piles.PileType;
 import se.atrosys.solitaire.cardstuff.piles.pilerules.AlternatingColorDescendingRule;
 import se.atrosys.solitaire.cardstuff.piles.pilerules.SameSuitAscendingAceFirstRule;
 import se.atrosys.solitaire.cardstuff.piles.pilerules.TakeOnlyRule;
@@ -16,7 +16,7 @@ import java.util.*;
 
 public class Canfield {
 	private final MoveFinder moveFinder = new MoveFinder();
-	private List<Pile> foundations;
+	private Set<Pile> foundations;
 	private List<Pile> tableaux;
 	private Pile reserve;
 	private Pile stock;
@@ -33,23 +33,24 @@ public class Canfield {
 	}
 
 	private void createPiles() {
-		foundations = new ArrayList<>();
+		foundations = new HashSet<>();
 		tableaux = new ArrayList<>();
-		reserve = new Pile().withTopOnly().withName("reserve").withRule(new TakeOnlyRule());
-		stock = new Pile().withName("stock").withRule(new TakeOnlyRule());
+		reserve = new Pile(PileType.RESERVE).withName("reserve");
+		stock = new Pile(PileType.STOCK).withName("stock");
 
 		for (int i = 0 ; i < 4 ; i++) {
-			foundations.add(new Pile().withRule(new SameSuitAscendingAceFirstRule()).withName("foundation"+i).withTopOnly());
-			tableaux.add(new Pile().withRule(new AlternatingColorDescendingRule()).withName("tableaux"+i));
+			foundations.add(new Pile(PileType.FOUNDATION).withName("foundation"+i));
+			tableaux.add(new Pile(PileType.TABLEAU).withName("tableaux"+i));
 		}
 	}
 
 	private void dealCards() throws EmptyDeckException {
 		reserve.addCards(deck.takeSeveral(16));
 
-		for (int i = 0 ; i < 4 ; i++) {
+//		for (int i = 0 ; i < 4 ; i++) {
+		for (Pile tableau: tableaux) {
 			try {
-				tableaux.get(i).dealCard(deck.takeNext());
+				tableau.dealCard(deck.takeNext());
 			} catch (EmptyDeckException e) {
 				logger.warn("Could not add card to tableaux", e);
 			}
@@ -58,15 +59,27 @@ public class Canfield {
 		stock.dealCards(deck.takeRemaining());
 	}
 
-	public List<Move> getAvailableMoves() {
+	public Set<Move> getAvailableMoves() {
 		Set<Move> moves = new HashSet<>();
+
+		// TODO if any of the tableaus are empty, then there can be only one move, which is reserve -> empty tableau
 
 		moves.addAll(getTableauInternalMoves());
 		moves.addAll(getTableauExternalMoves());
 		moves.addAll(getReserveMoves());
 		moves.addAll(getStockMoves());
 
-		return new ArrayList<>(moves);
+		moves = pruneMovesToFoundations(moves);
+
+		return moves;
+	}
+
+	protected Set<Move> pruneMovesToFoundations(Set<Move> moves) {
+		Set<Move> prunedMoves = new HashSet<>();
+
+		prunedMoves.addAll(moves);
+
+		return prunedMoves;
 	}
 
 	// TODO this method doesn't work very well if the pile list is empty.
