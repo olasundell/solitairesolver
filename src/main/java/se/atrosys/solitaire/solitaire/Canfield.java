@@ -17,7 +17,7 @@ import java.util.*;
 public class Canfield {
 	private final MoveFinder moveFinder = new MoveFinder();
 	private Set<Pile> foundations;
-	private List<Pile> tableaux;
+	private Set<Pile> tableaux;
 	private Pile reserve;
 	private Pile stock;
 	private Deck deck = new Deck();
@@ -34,7 +34,7 @@ public class Canfield {
 
 	private void createPiles() {
 		foundations = new HashSet<>();
-		tableaux = new ArrayList<>();
+		tableaux = new HashSet<>();
 		reserve = new Pile(PileType.RESERVE).withName("reserve");
 		stock = new Pile(PileType.STOCK).withName("stock");
 
@@ -83,13 +83,14 @@ public class Canfield {
 	}
 
 	// TODO this method doesn't work very well if the pile list is empty.
-	protected List<Move> getTableauInternalMoves() {
-		List<Move> moves = new ArrayList<>();
+	protected Set<Move> getTableauInternalMoves() {
+		Set<Move> moves = new HashSet<>();
+		Pile[] piles = tableaux.toArray(new Pile[tableaux.size()]);
 
-		for (int i = 0 ; i < tableaux.size() ; i++)  {
-			for (int j = i + 1 ; j < tableaux.size() ; j++) {
-				Pile firstPile = tableaux.get(i);
-				Pile secondPile = tableaux.get(j);
+		for (int i = 0 ; i < piles.length ; i++)  {
+			for (int j = i + 1 ; j < piles.length ; j++) {
+				Pile firstPile = piles[i];
+				Pile secondPile = piles[j];
 
 				moves.addAll(moveFinder.getMovesFromPiles(firstPile, secondPile));
 			}
@@ -110,7 +111,7 @@ public class Canfield {
 		return moves;
 	}
 
-	public List<Pile> getTableaux() {
+	public Set<Pile> getTableaux() {
 		return tableaux;
 	}
 
@@ -138,5 +139,29 @@ public class Canfield {
 		}
 
 		return moves;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Canfield canfield = (Canfield) o;
+
+		if (!foundations.equals(canfield.foundations)) return false;
+		if (!reserve.equals(canfield.reserve)) return false;
+		if (!stock.equals(canfield.stock)) return false;
+		if (!tableaux.equals(canfield.tableaux)) return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = foundations.hashCode();
+		result = 31 * result + tableaux.hashCode();
+		result = 31 * result + reserve.hashCode();
+		result = 31 * result + stock.hashCode();
+		return result;
 	}
 }

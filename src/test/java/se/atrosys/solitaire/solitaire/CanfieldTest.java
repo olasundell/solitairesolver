@@ -8,6 +8,7 @@ import se.atrosys.solitaire.cardstuff.Card;
 import se.atrosys.solitaire.cardstuff.moves.Move;
 import se.atrosys.solitaire.cardstuff.Suit;
 import se.atrosys.solitaire.cardstuff.piles.IneligibleCardException;
+import se.atrosys.solitaire.cardstuff.piles.Pile;
 
 import java.util.List;
 import java.util.Set;
@@ -33,16 +34,18 @@ public class CanfieldTest {
 
 	@Test
 	public void tableauInternalMovesShouldWork() throws IneligibleCardException {
+		Pile[] tableaux = canfield.getTableaux().toArray(new Pile[canfield.getTableaux().size()]);
+
 		for (int i = 0 ; i < 4 ; i++) {
-			canfield.getTableaux().get(i).clear();
+			tableaux[i].clear();
 		}
 
-		canfield.getTableaux().get(0).addCard(new Card(Suit.CLUBS, 5));
-		canfield.getTableaux().get(1).addCard(new Card(Suit.DIAMONDS, 6));
-		canfield.getTableaux().get(2).addCard(new Card(Suit.SPADES, 9));
-		canfield.getTableaux().get(3).addCard(new Card(Suit.HEARTS, 10));
+		tableaux[0].addCard(new Card(Suit.CLUBS, 5));
+		tableaux[1].addCard(new Card(Suit.DIAMONDS, 6));
+		tableaux[2].addCard(new Card(Suit.SPADES, 9));
+		tableaux[3].addCard(new Card(Suit.HEARTS, 10));
 
-		List<Move> moves = canfield.getTableauInternalMoves();
+		Set<Move> moves = canfield.getTableauInternalMoves();
 
 		Assert.assertNotNull(moves);
 		Assert.assertEquals(2, moves.size());
