@@ -4,9 +4,7 @@ import se.atrosys.solitaire.cardstuff.Card;
 import se.atrosys.solitaire.cardstuff.piles.pilerules.NoRule;
 import se.atrosys.solitaire.cardstuff.piles.pilerules.Rule;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Pile {
 	private final PileType pileType;
@@ -90,4 +88,29 @@ public class Pile {
 	public void dealCards(List<Card> cards) {
 		this.cards.addAll(cards);
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+
+        Pile pile = (Pile) o;
+
+        if (pileType != pile.pileType) { return false; }
+
+        if (pileType.isOrdered()) {
+            if (!cards.equals(pile.cards)) { return false; }
+        } else {
+            if (!cards.containsAll(pile.cards)) { return false; }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = pileType.hashCode();
+        result = 31 * result + cards.hashCode();
+        return result;
+    }
 }

@@ -6,17 +6,19 @@ import se.atrosys.solitaire.cardstuff.piles.pilerules.SameSuitAscendingAceFirstR
 import se.atrosys.solitaire.cardstuff.piles.pilerules.TakeOnlyRule;
 
 public enum PileType {
-	TABLEAU(new AlternatingColorDescendingRule(), TakeOrder.ALL),
-	FOUNDATION(new SameSuitAscendingAceFirstRule(), TakeOrder.TOP_ONLY),
-	RESERVE(new TakeOnlyRule(), TakeOrder.TOP_ONLY),
-	STOCK(new TakeOnlyRule(), TakeOrder.ALL);
+	TABLEAU(new AlternatingColorDescendingRule(), TakeType.ALL, Order.ORDERED),
+	FOUNDATION(new SameSuitAscendingAceFirstRule(), TakeType.TOP_ONLY, Order.ORDERED),
+	RESERVE(new TakeOnlyRule(), TakeType.TOP_ONLY, Order.ORDERED),
+	STOCK(new TakeOnlyRule(), TakeType.ALL, Order.UNORDERED);
 
 	private final Rule rule;
-	private final TakeOrder takeOrder;
+	private final TakeType takeType;
+    private final Order order;
 
-	PileType(Rule rule, TakeOrder takeOrder) {
+	PileType(Rule rule, TakeType takeType, Order order) {
 		this.rule = rule;
-		this.takeOrder = takeOrder;
+		this.takeType = takeType;
+        this.order = order;
 	}
 
 	public Rule getRule() {
@@ -24,11 +26,20 @@ public enum PileType {
 	}
 
 	public boolean isTopOnly() {
-		return takeOrder.equals(TakeOrder.TOP_ONLY);
+		return takeType.equals(TakeType.TOP_ONLY);
 	}
 
-	private enum TakeOrder {
+    public boolean isOrdered() {
+        return order == Order.ORDERED;
+    }
+
+    private enum TakeType {
 		TOP_ONLY,
 		ALL
 	}
+
+    private enum Order {
+        UNORDERED,
+        ORDERED
+    }
 }

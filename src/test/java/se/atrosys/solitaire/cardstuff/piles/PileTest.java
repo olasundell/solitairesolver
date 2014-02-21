@@ -57,4 +57,56 @@ public class PileTest {
 		pile.addCard(new Card(Suit.CLUBS, 1));
 		pile.addCard(new Card(Suit.SPADES, 2));
 	}
+
+    @Test
+    public void pilesShouldEqualWhenOrdered() {
+        Pile p1 = new Pile(PileType.FOUNDATION);
+        Pile p2 = new Pile(PileType.FOUNDATION);
+
+        p1.dealCard(new Card(Suit.CLUBS, 1));
+        p1.dealCard(new Card(Suit.CLUBS, 2));
+        p2.dealCard(new Card(Suit.CLUBS, 1));
+        p2.dealCard(new Card(Suit.CLUBS, 2));
+
+        Assert.assertEquals(p1, p2);
+    }
+
+    @Test
+    public void pilesShouldNotEqualWhenOrdered() {
+        Pile p1 = new Pile(PileType.FOUNDATION);
+        Pile p2 = new Pile(PileType.FOUNDATION);
+
+        p1.dealCard(new Card(Suit.CLUBS, 2));
+        p1.dealCard(new Card(Suit.CLUBS, 1));
+        p2.dealCard(new Card(Suit.CLUBS, 1));
+        p2.dealCard(new Card(Suit.CLUBS, 2));
+
+        Assert.assertNotEquals(p1, p2);
+    }
+
+    @Test
+    public void pilesShouldEqualWhenUnorderedYetWithOrder() {
+        Pile p1 = new Pile(PileType.STOCK);
+        Pile p2 = new Pile(PileType.STOCK);
+
+        p1.dealCard(new Card(Suit.CLUBS, 1));
+        p1.dealCard(new Card(Suit.CLUBS, 2));
+        p2.dealCard(new Card(Suit.CLUBS, 1));
+        p2.dealCard(new Card(Suit.CLUBS, 2));
+
+        Assert.assertEquals(p1, p2);
+    }
+
+    @Test
+    public void pilesShouldEqualWhenTrulyUnordered() {
+        Pile p1 = new Pile(PileType.STOCK);
+        Pile p2 = new Pile(PileType.STOCK);
+
+        p1.dealCard(new Card(Suit.CLUBS, 2));
+        p1.dealCard(new Card(Suit.CLUBS, 1));
+        p2.dealCard(new Card(Suit.CLUBS, 1));
+        p2.dealCard(new Card(Suit.CLUBS, 2));
+
+        Assert.assertEquals(p1, p2);
+    }
 }
