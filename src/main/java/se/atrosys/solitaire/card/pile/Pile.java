@@ -115,4 +115,8 @@ public class Pile {
         result = 31 * result + cards.hashCode();
         return result;
     }
+
+	public int size() {
+		return cards.size();
+	}
 }

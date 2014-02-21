@@ -69,7 +69,20 @@ public class CanfieldTest {
 	}
 
 	@Test
+	public void shouldNotReportAsSolvedWhenInFactNotSolved() {
+		Assert.assertFalse(canfield.isSolved());
+	}
+
+	@Test
 	public void shouldReportAsSolvedWhenActuallySolved() {
-		// TODO write me.
+		Pile[] foundations = canfield.getFoundations().toArray(new Pile[4]);
+		for (int i = 0 ; i < 4 ; i++) {
+			foundations[i].clear();
+			for (int j = 1 ; j <= 13 ; j++) {
+				foundations[i].dealCard(new Card(Suit.values()[i], j));
+			}
+		}
+
+		Assert.assertTrue(canfield.isSolved());
 	}
 }

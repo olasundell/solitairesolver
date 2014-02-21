@@ -165,11 +165,15 @@ public class Canfield {
 
 	public boolean isSolved() {
 		for (Pile pile: foundations) {
-			if (pile.peek().getRank() != 13) {
+			if (pile.size() != 13 || pile.peek().getRank() != 13) {
 				return false;
 			}
 		}
 
 		return true;
+	}
+
+	public Set<Pile> getFoundations() {
+		return foundations;
 	}
 }
