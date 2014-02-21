@@ -1,12 +1,9 @@
-package se.atrosys.solitaire.cardstuff.piles;
+package se.atrosys.solitaire.card.pile;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import se.atrosys.solitaire.cardstuff.Card;
-import se.atrosys.solitaire.cardstuff.Suit;
-import se.atrosys.solitaire.cardstuff.piles.pilerules.AlternatingColorDescendingRule;
-import se.atrosys.solitaire.cardstuff.piles.pilerules.Rule;
-import se.atrosys.solitaire.cardstuff.piles.pilerules.SameSuitAscendingAceFirstRule;
+import se.atrosys.solitaire.card.Card;
+import se.atrosys.solitaire.card.Suit;
 
 public class PileTest {
 	@Test

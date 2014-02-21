@@ -142,6 +142,7 @@ public class Canfield {
 		return moves;
 	}
 
+<<<<<<< HEAD
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -165,7 +166,7 @@ public class Canfield {
 		result = 31 * result + stock.hashCode();
 		return result;
 	}
-
+=======
 	public boolean isSolved() {
 		for (Pile pile: foundations) {
 			if (pile.peek().getRank() != 13) {
@@ -175,4 +176,5 @@ public class Canfield {
 
 		return true;
 	}
+>>>>>>> d37d776d15c21d5d2a20dd22981fca9c174df903
 }

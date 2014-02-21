@@ -1,16 +1,15 @@
-package se.atrosys.solitaire.solitaire;
+package se.atrosys.solitaire.game;
 
 import org.junit.Assert;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import se.atrosys.solitaire.cardstuff.Card;
-import se.atrosys.solitaire.cardstuff.moves.Move;
-import se.atrosys.solitaire.cardstuff.Suit;
-import se.atrosys.solitaire.cardstuff.piles.IneligibleCardException;
-import se.atrosys.solitaire.cardstuff.piles.Pile;
+import se.atrosys.solitaire.card.Card;
+import se.atrosys.solitaire.card.move.Move;
+import se.atrosys.solitaire.card.Suit;
+import se.atrosys.solitaire.card.pile.IneligibleCardException;
+import se.atrosys.solitaire.card.pile.Pile;
 
-import java.util.List;
 import java.util.Set;
 
 public class CanfieldTest {

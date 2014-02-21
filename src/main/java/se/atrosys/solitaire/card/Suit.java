@@ -1,4 +1,4 @@
-package se.atrosys.solitaire.cardstuff;
+package se.atrosys.solitaire.card;
 
 public enum Suit {
 	SPADES(Color.BLACK),

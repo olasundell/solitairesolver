@@ -1,9 +1,9 @@
-package se.atrosys.solitaire.cardstuff.piles;
+package se.atrosys.solitaire.card.pile;
 
-import se.atrosys.solitaire.cardstuff.piles.pilerules.AlternatingColorDescendingRule;
-import se.atrosys.solitaire.cardstuff.piles.pilerules.Rule;
-import se.atrosys.solitaire.cardstuff.piles.pilerules.SameSuitAscendingAceFirstRule;
-import se.atrosys.solitaire.cardstuff.piles.pilerules.TakeOnlyRule;
+import se.atrosys.solitaire.card.pile.rule.AlternatingColorDescendingRule;
+import se.atrosys.solitaire.card.pile.rule.Rule;
+import se.atrosys.solitaire.card.pile.rule.SameSuitAscendingAceFirstRule;
+import se.atrosys.solitaire.card.pile.rule.TakeOnlyRule;
 
 public enum PileType {
 	TABLEAU(new AlternatingColorDescendingRule(), TakeType.ALL, Order.ORDERED),

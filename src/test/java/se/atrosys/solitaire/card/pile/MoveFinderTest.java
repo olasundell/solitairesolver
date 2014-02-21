@@ -1,15 +1,12 @@
-package se.atrosys.solitaire.cardstuff.piles;
+package se.atrosys.solitaire.card.pile;
 
 import org.junit.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import se.atrosys.solitaire.cardstuff.Card;
-import se.atrosys.solitaire.cardstuff.moves.Move;
-import se.atrosys.solitaire.cardstuff.Suit;
-import se.atrosys.solitaire.cardstuff.moves.MoveFinder;
-import se.atrosys.solitaire.cardstuff.piles.pilerules.AlternatingColorDescendingRule;
-import se.atrosys.solitaire.cardstuff.piles.pilerules.SameSuitAscendingAceFirstRule;
-import se.atrosys.solitaire.cardstuff.piles.pilerules.TakeOnlyRule;
+import se.atrosys.solitaire.card.Card;
+import se.atrosys.solitaire.card.move.Move;
+import se.atrosys.solitaire.card.Suit;
+import se.atrosys.solitaire.card.move.MoveFinder;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,7 +1,7 @@
-package se.atrosys.solitaire.cardstuff.moves;
+package se.atrosys.solitaire.card.move;
 
-import se.atrosys.solitaire.cardstuff.Card;
-import se.atrosys.solitaire.cardstuff.piles.Pile;
+import se.atrosys.solitaire.card.Card;
+import se.atrosys.solitaire.card.pile.Pile;
 
 import java.util.ArrayList;
 import java.util.List;

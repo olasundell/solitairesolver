@@ -1,4 +1,4 @@
-package se.atrosys.solitaire.cardstuff;
+package se.atrosys.solitaire.card;
 
 import org.testng.annotations.Test;
 

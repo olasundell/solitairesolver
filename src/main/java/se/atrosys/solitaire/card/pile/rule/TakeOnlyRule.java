@@ -1,6 +1,6 @@
-package se.atrosys.solitaire.cardstuff.piles.pilerules;
+package se.atrosys.solitaire.card.pile.rule;
 
-import se.atrosys.solitaire.cardstuff.Card;
+import se.atrosys.solitaire.card.Card;
 
 public class TakeOnlyRule implements Rule {
 	@Override

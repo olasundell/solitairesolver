@@ -1,7 +1,6 @@
-package se.atrosys.solitaire.cardstuff;
+package se.atrosys.solitaire.card;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 

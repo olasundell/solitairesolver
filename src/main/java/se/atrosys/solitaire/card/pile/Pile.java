@@ -1,8 +1,7 @@
-package se.atrosys.solitaire.cardstuff.piles;
+package se.atrosys.solitaire.card.pile;
 
-import se.atrosys.solitaire.cardstuff.Card;
-import se.atrosys.solitaire.cardstuff.piles.pilerules.NoRule;
-import se.atrosys.solitaire.cardstuff.piles.pilerules.Rule;
+import se.atrosys.solitaire.card.Card;
+import se.atrosys.solitaire.card.pile.rule.Rule;
 
 import java.util.*;
 
@@ -97,6 +96,9 @@ public class Pile {
         Pile pile = (Pile) o;
 
         if (pileType != pile.pileType) { return false; }
+
+		// this is so we avoid problems setting up, because the Set will reject adds otherwise
+		if (cards.isEmpty() && pile.cards.isEmpty() && !name.equals(pile.name)) { return false; }
 
         if (pileType.isOrdered()) {
             if (!cards.equals(pile.cards)) { return false; }

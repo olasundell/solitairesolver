@@ -1,9 +1,9 @@
-package se.atrosys.solitaire.cardstuff.piles.pilerules;
+package se.atrosys.solitaire.card.pile.rule;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import se.atrosys.solitaire.cardstuff.Card;
-import se.atrosys.solitaire.cardstuff.Suit;
+import se.atrosys.solitaire.card.Card;
+import se.atrosys.solitaire.card.Suit;
 
 public class SameSuitAscendingAceFirstRuleTest {
 	SameSuitAscendingAceFirstRule rule = new SameSuitAscendingAceFirstRule();
