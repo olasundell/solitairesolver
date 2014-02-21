@@ -14,6 +14,7 @@ import se.atrosys.solitaire.cardstuff.piles.pilerules.TakeOnlyRule;
 
 import java.util.*;
 
+// TODO create a builder for this class, it'll be quite heavy in due time.
 public class Canfield {
 	private final MoveFinder moveFinder = new MoveFinder();
 	private Set<Pile> foundations;
@@ -138,5 +139,15 @@ public class Canfield {
 		}
 
 		return moves;
+	}
+
+	public boolean isSolved() {
+		for (Pile pile: foundations) {
+			if (pile.peek().getRank() != 13) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
