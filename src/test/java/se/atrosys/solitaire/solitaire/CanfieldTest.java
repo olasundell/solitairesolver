@@ -53,6 +53,7 @@ public class CanfieldTest {
 
 	@Test
 	public void shouldPruneFoundationMoves() {
+		// TODO write me
 		Set<Move> moves = canfield.getAvailableMoves();
 
 		Set<Move> prunedMoves = canfield.pruneMovesToFoundations(moves);
@@ -66,5 +67,10 @@ public class CanfieldTest {
 //			if (move.getTo().)
 //			numberOfFoundationMoves
 		}
+	}
+
+	@Test
+	public void shouldReportAsSolvedWhenActuallySolved() {
+		// TODO write me.
 	}
 }
