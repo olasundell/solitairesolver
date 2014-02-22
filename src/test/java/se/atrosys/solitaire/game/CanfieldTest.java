@@ -10,6 +10,7 @@ import se.atrosys.solitaire.card.Suit;
 import se.atrosys.solitaire.card.pile.IneligibleCardException;
 import se.atrosys.solitaire.card.pile.Pile;
 
+import java.util.List;
 import java.util.Set;
 
 public class CanfieldTest {
@@ -69,6 +70,19 @@ public class CanfieldTest {
 	}
 
 	@Test
+	public void shouldOnlyFindOneMoveFromReserveToTableauxWhenTableauxEmpty() {
+		Set<Pile> tableaux = canfield.getTableaux();
+		Pile[] tabArr = tableaux.toArray(new Pile[tableaux.size()]);
+
+		// TODO this puts the whole solitaire in a broken state, find a better way to generate an empty tableaux
+		tabArr[0].clear();
+
+		Set<Move> moves = canfield.getAvailableMoves();
+
+		Assert.assertEquals(1, moves.size());
+	}
+
+	@Test
 	public void shouldNotReportAsSolvedWhenInFactNotSolved() {
 		Assert.assertFalse(canfield.isSolved());
 	}
@@ -84,5 +98,20 @@ public class CanfieldTest {
 		}
 
 		Assert.assertTrue(canfield.isSolved());
+	}
+
+	@Test
+	public void hashCodeShouldBeSameEvenIfStockChangesOrder() {
+		int one = canfield.hashCode();
+		Pile stock = canfield.getStock();
+		Card c1 = stock.take();
+		Card c2 = stock.take();
+
+		stock.dealCard(c1);
+		stock.dealCard(c2);
+
+		int two = canfield.hashCode();
+
+		Assert.assertEquals(one, two);
 	}
 }

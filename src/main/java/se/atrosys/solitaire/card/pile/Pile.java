@@ -112,11 +112,23 @@ public class Pile {
     @Override
     public int hashCode() {
         int result = pileType.hashCode();
-        result = 31 * result + cards.hashCode();
+
+		if (!pileType.isOrdered()) {
+			Set<Card> set = new HashSet<>();
+			set.addAll(cards);
+			result = 31 * result + set.hashCode();
+		} else {
+			result = 31 * result + cards.hashCode();
+		}
+		
         return result;
     }
 
 	public int size() {
 		return cards.size();
+	}
+
+	public boolean isEmpty() {
+		return cards.isEmpty();
 	}
 }

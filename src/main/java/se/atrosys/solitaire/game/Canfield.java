@@ -61,6 +61,12 @@ public class Canfield {
 		Set<Move> moves = new HashSet<>();
 
 		// TODO if any of the tableaus are empty, then there can be only one move, which is reserve -> empty tableau
+		for (Pile tableau: getTableaux()) {
+			if (tableau.isEmpty() && !reserve.isEmpty()) {
+				moves.add(new Move(reserve, tableau, reserve.peek()));
+				return moves;
+			}
+		}
 
 		moves.addAll(getTableauInternalMoves());
 		moves.addAll(getTableauExternalMoves());
@@ -173,7 +179,11 @@ public class Canfield {
 		return true;
 	}
 
-	public Set<Pile> getFoundations() {
+	protected Set<Pile> getFoundations() {
 		return foundations;
+	}
+
+	protected Pile getStock() {
+		return stock;
 	}
 }
