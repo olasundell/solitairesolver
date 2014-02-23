@@ -59,12 +59,18 @@ public class Pile {
 		if (name != null && !name.isEmpty()) {
 			builder.append(name);
 		} else {
-			for (Card card : cards) {
-				builder.append(card.toString());
-				builder.append(" ");
-			}
+			builder.append(toCardString());
 		}
 
+		return builder.toString();
+	}
+
+	public String toCardString() {
+		StringBuilder builder = new StringBuilder();
+		for (Card card: cards) {
+			builder.append(card.toString());
+			builder.append(" ");
+		}
 		return builder.toString();
 	}
 
@@ -112,11 +118,31 @@ public class Pile {
     @Override
     public int hashCode() {
         int result = pileType.hashCode();
-        result = 31 * result + cards.hashCode();
+
+		if (!pileType.isOrdered()) {
+			Set<Card> set = new HashSet<>();
+			set.addAll(cards);
+			result = 31 * result + set.hashCode();
+		} else {
+			result = 31 * result + cards.hashCode();
+		}
+
         return result;
     }
 
 	public int size() {
 		return cards.size();
+	}
+
+	public boolean isEmpty() {
+		return cards.isEmpty();
+	}
+
+	public void removeCard(Card card) {
+		cards.remove(card);
+	}
+
+	public PileType getPileType() {
+		return pileType;
 	}
 }

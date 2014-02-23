@@ -5,12 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import se.atrosys.solitaire.card.Card;
+import se.atrosys.solitaire.card.EmptyDeckException;
 import se.atrosys.solitaire.card.move.Move;
 import se.atrosys.solitaire.card.Suit;
 import se.atrosys.solitaire.card.pile.IneligibleCardException;
 import se.atrosys.solitaire.card.pile.Pile;
 
-import java.util.Set;
+import java.util.*;
 
 public class CanfieldTest {
 	Canfield canfield;
@@ -74,6 +75,19 @@ public class CanfieldTest {
 	}
 
 	@Test
+	public void shouldOnlyFindOneMoveFromReserveToTableauxWhenTableauxEmpty() {
+		Set<Pile> tableaux = canfield.getTableaux();
+		Pile[] tabArr = tableaux.toArray(new Pile[tableaux.size()]);
+
+		// TODO this puts the whole solitaire in a broken state, find a better way to generate an empty tableaux
+		tabArr[0].clear();
+
+		Set<Move> moves = canfield.getAvailableMoves();
+
+		Assert.assertEquals(1, moves.size());
+	}
+
+	@Test
 	public void shouldNotReportAsSolvedWhenInFactNotSolved() {
 		Assert.assertFalse(canfield.isSolved());
 	}
@@ -89,5 +103,57 @@ public class CanfieldTest {
 		}
 
 		Assert.assertTrue(canfield.isSolved());
+	}
+
+	@Test
+	public void hashCodeShouldBeSameEvenIfStockChangesOrder() {
+		int one = canfield.hashCode();
+		Pile stock = canfield.getStock();
+		Card c1 = stock.take();
+		Card c2 = stock.take();
+
+		stock.dealCard(c1);
+		stock.dealCard(c2);
+
+		int two = canfield.hashCode();
+
+		Assert.assertEquals(one, two);
+	}
+
+	@Test(enabled = false)
+	public void hashCodesShouldBeUnique() throws EmptyDeckException {
+		Map<String, Canfield> map = new HashMap<>();
+		Set<String> set = new HashSet<>();
+		int duplicates = 0;
+
+		for (long i = 0 ; i < 1000000 ; i++) {
+			Canfield c = new Canfield(i);
+			String key = c.hashString();
+
+			if (i % 10000 == 0) {
+				System.out.println(i);
+			}
+
+			if (set.contains(key)) {
+				Canfield expected = map.get(key);
+				Assert.assertEquals(String.format("iteration %d: map contains %s but %s isn't equal.", i, expected.toString(), c.toString()),
+						expected,
+						c);
+
+				duplicates++;
+			}
+			map.put(key, c);
+			set.add(key);
+		}
+
+		System.out.println("Duplicates: " + duplicates);
+	}
+
+	@Test
+	public void executeMove() throws IneligibleCardException {
+		Set<Move> moves = canfield.getAvailableMoves();
+		Move move = moves.iterator().next();
+
+		canfield.executeMove(move);
 	}
 }

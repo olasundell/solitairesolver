@@ -2,12 +2,15 @@ package se.atrosys.solitaire.game;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.atrosys.solitaire.card.Card;
 import se.atrosys.solitaire.card.Deck;
 import se.atrosys.solitaire.card.EmptyDeckException;
 import se.atrosys.solitaire.card.move.Move;
 import se.atrosys.solitaire.card.move.MoveFinder;
+import se.atrosys.solitaire.card.pile.IneligibleCardException;
 import se.atrosys.solitaire.card.pile.Pile;
 import se.atrosys.solitaire.card.pile.PileType;
+import se.atrosys.solitaire.card.pile.rule.PileComparator;
 
 import java.util.*;
 
@@ -20,6 +23,12 @@ public class Canfield {
 	private Pile stock;
 	private Deck deck = new Deck();
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private Queue<Move> executedMoves = new ArrayDeque<>();
+
+	protected Canfield(long randseed) throws EmptyDeckException {
+		deck = new Deck(randseed);
+		setup();
+	}
 
 	public Canfield() throws EmptyDeckException {
 		setup();
@@ -61,6 +70,12 @@ public class Canfield {
 		Set<Move> moves = new HashSet<>();
 
 		// TODO if any of the tableaus are empty, then there can be only one move, which is reserve -> empty tableau
+		for (Pile tableau: getTableaux()) {
+			if (tableau.isEmpty() && !reserve.isEmpty()) {
+				moves.add(new Move(reserve, tableau, reserve.peek()));
+				return moves;
+			}
+		}
 
 		moves.addAll(getTableauInternalMoves());
 		moves.addAll(getTableauExternalMoves());
@@ -75,6 +90,16 @@ public class Canfield {
 	protected Set<Move> pruneMovesToFoundations(Set<Move> moves) {
 		Set<Move> prunedMoves = new HashSet<>();
 
+		// TODO write me
+//		Set<Move> possibleDuplicates = new HashSet<>();
+//
+//		for (Move move: moves) {
+//			if (foundations.contains(move.getTo()) && move.getCard().getRank() == 1) {
+//
+//			} else {
+//
+//			}
+//		}
 		prunedMoves.addAll(moves);
 
 		return prunedMoves;
@@ -173,7 +198,79 @@ public class Canfield {
 		return true;
 	}
 
-	public Set<Pile> getFoundations() {
+	protected Set<Pile> getFoundations() {
 		return foundations;
+	}
+
+	protected Pile getStock() {
+		return stock;
+	}
+
+	public String hashString() {
+		StringBuilder builder = new StringBuilder();
+
+		java.util.SortedSet<Pile> sortedFoundations = new TreeSet<>(new PileComparator());
+		java.util.SortedSet<Pile> sortedTableaux = new TreeSet<>(new PileComparator());
+
+		sortedFoundations.addAll(foundations);
+		sortedTableaux.addAll(tableaux);
+
+		for (Pile pile: sortedFoundations) {
+			builder.append('F');
+			builder.append(pile.toCardString());
+		}
+
+		for (Pile pile: sortedTableaux) {
+			builder.append('T');
+			builder.append(pile.toCardString());
+		}
+
+		builder.append('R');
+		builder.append(reserve.toCardString());
+
+		builder.append('S');
+		builder.append(stock.toCardString());
+
+		return builder.toString();
+	}
+
+	public void executeMove(Move move) throws IneligibleCardException {
+		// TODO write fail-safe checks
+
+		Pile from = move.getFrom();
+		Pile to = move.getTo();
+		from.removeCard(move.getCard());
+		to.addCard(move.getCard());
+
+		for (Card follower: move.getFollowers()) {
+			from.removeCard(follower);
+			to.addCard(follower);
+		}
+
+		executedMoves.add(move);
+	}
+
+	/**
+	 * Will undo the latest move, or silently do nothing if no moves have been made.
+	 * @throws IneligibleCardException
+	 */
+
+	public void undoLatest() throws IneligibleCardException {
+		// TODO rewrite this in a way more robust manner
+		if (executedMoves.isEmpty()) {
+			return;
+		}
+
+		Move move = executedMoves.poll();
+		Pile from = move.getFrom();
+		Pile to = move.getTo();
+
+		from.addCard(move.getCard());
+		to.removeCard(move.getCard());
+
+		for (Card follower: move.getFollowers()) {
+			from.addCard(follower);
+			to.removeCard(follower);
+		}
 	}
 }

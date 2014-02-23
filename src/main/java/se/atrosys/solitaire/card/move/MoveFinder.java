@@ -2,6 +2,7 @@ package se.atrosys.solitaire.card.move;
 
 import se.atrosys.solitaire.card.Card;
 import se.atrosys.solitaire.card.pile.Pile;
+import se.atrosys.solitaire.card.pile.PileType;
 import se.atrosys.solitaire.card.pile.rule.Rule;
 
 import java.util.ArrayList;
@@ -54,8 +55,14 @@ public class MoveFinder {
 			Card secondCard = secondPile.peek();
 
 			if (rule.eligible(secondCard, firstCard)) {
-				List<Card> followers = firstPileCards.subList(k + 1, firstPileCards.size());
-				moves.add(new Move(firstPile, secondPile, firstCard).withFollowers(followers));
+				Move move = new Move(firstPile, secondPile, firstCard);
+
+				if (firstPile.getPileType() == PileType.TABLEAU) {
+					List<Card> followers = firstPileCards.subList(k + 1, firstPileCards.size());
+					move = move.withFollowers(followers);
+				}
+				
+				moves.add(move);
 			}
 		}
 
