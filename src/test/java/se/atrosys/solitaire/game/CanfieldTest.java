@@ -1,7 +1,7 @@
 package se.atrosys.solitaire.game;
 
-import org.junit.Assert;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import se.atrosys.solitaire.card.Card;
@@ -131,9 +131,9 @@ public class CanfieldTest {
 
 			if (set.contains(key)) {
 				Canfield expected = map.get(key);
-				Assert.assertEquals(String.format("iteration %d: map contains %s but %s isn't equal.", i, expected.toString(), c.toString()),
-						expected,
-						c);
+				Assert.assertEquals(expected,
+						c,
+						String.format("iteration %d: map contains %s but %s isn't equal.", i, expected.toString(), c.toString()));
 
 				duplicates++;
 			}

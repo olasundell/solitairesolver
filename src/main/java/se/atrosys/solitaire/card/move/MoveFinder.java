@@ -61,7 +61,7 @@ public class MoveFinder {
 					List<Card> followers = firstPileCards.subList(k + 1, firstPileCards.size());
 					move = move.withFollowers(followers);
 				}
-				
+
 				moves.add(move);
 			}
 		}

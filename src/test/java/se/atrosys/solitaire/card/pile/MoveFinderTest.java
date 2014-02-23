@@ -1,6 +1,6 @@
 package se.atrosys.solitaire.card.pile;
 
-import org.junit.Assert;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import se.atrosys.solitaire.card.Card;

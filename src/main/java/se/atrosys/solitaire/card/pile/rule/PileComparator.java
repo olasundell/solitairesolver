@@ -1,11 +1,9 @@
 package se.atrosys.solitaire.card.pile.rule;
 
-import javafx.collections.transformation.SortedList;
 import se.atrosys.solitaire.card.Card;
 import se.atrosys.solitaire.card.Suit;
 import se.atrosys.solitaire.card.pile.Pile;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
