@@ -59,12 +59,18 @@ public class Pile {
 		if (name != null && !name.isEmpty()) {
 			builder.append(name);
 		} else {
-			for (Card card : cards) {
-				builder.append(card.toString());
-				builder.append(" ");
-			}
+			builder.append(toCardString());
 		}
 
+		return builder.toString();
+	}
+
+	public String toCardString() {
+		StringBuilder builder = new StringBuilder();
+		for (Card card: cards) {
+			builder.append(card.toString());
+			builder.append(" ");
+		}
 		return builder.toString();
 	}
 
@@ -120,7 +126,7 @@ public class Pile {
 		} else {
 			result = 31 * result + cards.hashCode();
 		}
-		
+
         return result;
     }
 
@@ -130,5 +136,13 @@ public class Pile {
 
 	public boolean isEmpty() {
 		return cards.isEmpty();
+	}
+
+	public void removeCard(Card card) {
+		cards.remove(card);
+	}
+
+	public PileType getPileType() {
+		return pileType;
 	}
 }

@@ -5,13 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import se.atrosys.solitaire.card.Card;
+import se.atrosys.solitaire.card.EmptyDeckException;
 import se.atrosys.solitaire.card.move.Move;
 import se.atrosys.solitaire.card.Suit;
 import se.atrosys.solitaire.card.pile.IneligibleCardException;
 import se.atrosys.solitaire.card.pile.Pile;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class CanfieldTest {
 	Canfield canfield;
@@ -113,5 +113,42 @@ public class CanfieldTest {
 		int two = canfield.hashCode();
 
 		Assert.assertEquals(one, two);
+	}
+
+	@Test(enabled = false)
+	public void hashCodesShouldBeUnique() throws EmptyDeckException {
+		Map<String, Canfield> map = new HashMap<>();
+		Set<String> set = new HashSet<>();
+		int duplicates = 0;
+
+		for (long i = 0 ; i < 1000000 ; i++) {
+			Canfield c = new Canfield(i);
+			String key = c.hashString();
+
+			if (i % 10000 == 0) {
+				System.out.println(i);
+			}
+
+			if (set.contains(key)) {
+				Canfield expected = map.get(key);
+				Assert.assertEquals(String.format("iteration %d: map contains %s but %s isn't equal.", i, expected.toString(), c.toString()),
+						expected,
+						c);
+
+				duplicates++;
+			}
+			map.put(key, c);
+			set.add(key);
+		}
+
+		System.out.println("Duplicates: " + duplicates);
+	}
+
+	@Test
+	public void executeMove() throws IneligibleCardException {
+		Set<Move> moves = canfield.getAvailableMoves();
+		Move move = moves.iterator().next();
+
+		canfield.executeMove(move);
 	}
 }

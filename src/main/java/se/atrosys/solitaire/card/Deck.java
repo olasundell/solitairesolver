@@ -9,11 +9,20 @@ public class Deck {
 	private Random random = new Random(0);
 
 	public Deck() {
+		setup();
+	}
+
+	protected void setup() {
 		for (Suit suit: Suit.values()) {
 			for (int i = 1 ; i <= 13 ; i++) {
 				cards.add(new Card(suit, i));
 			}
 		}
+	}
+
+	public Deck(long randseed) {
+		random = new Random(randseed);
+		setup();
 	}
 
 	public Card takeNext() throws EmptyDeckException {
