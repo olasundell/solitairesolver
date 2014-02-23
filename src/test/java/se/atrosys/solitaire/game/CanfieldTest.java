@@ -52,7 +52,7 @@ public class CanfieldTest {
 
 	@Test
 	public void shouldPruneFoundationMoves() {
-		// TODO write me
+		// We know we'll only have one ace to move to an empty foundation.
 		Set<Move> moves = canfield.getAvailableMoves();
 
 		Set<Move> prunedMoves = canfield.pruneMovesToFoundations(moves);
@@ -63,9 +63,14 @@ public class CanfieldTest {
 		int numberOfFoundationMoves = 0;
 
 		for (Move move: prunedMoves) {
-//			if (move.getTo().)
-//			numberOfFoundationMoves
+			for (Pile foundation: canfield.getFoundations()) {
+				if (move.getTo().equals(foundation)) {
+					numberOfFoundationMoves++;
+				}
+			}
 		}
+
+		Assert.assertEquals(1, numberOfFoundationMoves);
 	}
 
 	@Test
