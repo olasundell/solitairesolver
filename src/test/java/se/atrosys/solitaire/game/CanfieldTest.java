@@ -6,10 +6,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import se.atrosys.solitaire.card.Card;
 import se.atrosys.solitaire.card.EmptyDeckException;
+import se.atrosys.solitaire.card.move.IllegalMoveException;
 import se.atrosys.solitaire.card.move.Move;
 import se.atrosys.solitaire.card.Suit;
 import se.atrosys.solitaire.card.pile.IneligibleCardException;
 import se.atrosys.solitaire.card.pile.Pile;
+import se.atrosys.solitaire.card.pile.PileType;
+import se.atrosys.solitaire.card.pile.rule.PileComparator;
 
 import java.util.*;
 
@@ -51,7 +54,7 @@ public class CanfieldTest {
 		Assert.assertEquals(2, moves.size());
 	}
 
-	@Test
+	@Test(enabled = false)
 	public void shouldPruneFoundationMoves() {
 		// We know we'll only have one ace to move to an empty foundation.
 		Set<Move> moves = canfield.getAvailableMoves();
@@ -76,7 +79,7 @@ public class CanfieldTest {
 
 	@Test
 	public void shouldOnlyFindOneMoveFromReserveToTableauxWhenTableauxEmpty() {
-		Set<Pile> tableaux = canfield.getTableaux();
+		Deque<Pile> tableaux = canfield.getTableaux();
 		Pile[] tabArr = tableaux.toArray(new Pile[tableaux.size()]);
 
 		// TODO this puts the whole solitaire in a broken state, find a better way to generate an empty tableaux
@@ -84,7 +87,7 @@ public class CanfieldTest {
 
 		Set<Move> moves = canfield.getAvailableMoves();
 
-		Assert.assertEquals(1, moves.size());
+		Assert.assertEquals(moves.size(), 1);
 	}
 
 	@Test
@@ -149,11 +152,48 @@ public class CanfieldTest {
 		System.out.println("Duplicates: " + duplicates);
 	}
 
+	@Test(expectedExceptions = IllegalMoveException.class)
+	public void assertMoveShouldWorkWithNullFrom() throws IllegalMoveException {
+		Move move = new Move(null, canfield.getStock(), canfield.getStock().peek());
+		canfield.assertMove(move);
+	}
+
+	@Test(expectedExceptions = IllegalMoveException.class)
+	public void assertMoveShouldWorkWithNullTo() throws IllegalMoveException {
+		Move move = new Move(canfield.getStock(), null, canfield.getStock().peek());
+		canfield.assertMove(move);
+	}
+
+	@Test(expectedExceptions = IllegalMoveException.class)
+	public void assertMoveShouldWorkWithNullCard() throws IllegalMoveException {
+		Move move = new Move(canfield.getStock(), null, canfield.getStock().peek());
+		canfield.assertMove(move);
+	}
+
+	@Test(expectedExceptions = IllegalMoveException.class)
+	public void assertMoveShouldWorkWithNonExistingFrom() throws IllegalMoveException {
+		Move move = new Move(new Pile(PileType.FOUNDATION), canfield.getStock(), canfield.getStock().peek());
+		canfield.assertMove(move);
+	}
+
 	@Test
-	public void executeMove() throws IneligibleCardException {
+	public void executeMove() throws IneligibleCardException, IllegalMoveException {
 		Set<Move> moves = canfield.getAvailableMoves();
 		Move move = moves.iterator().next();
 
 		canfield.executeMove(move);
+	}
+
+	@Test
+	public void moveAndUndoShouldResultInOriginalState() throws IneligibleCardException, IllegalMoveException {
+		String firstHash = canfield.hashString();
+		Set<Move> moves = canfield.getAvailableMoves();
+		Move move = moves.iterator().next();
+
+		canfield.executeMove(move);
+		Assert.assertNotEquals(canfield.hashString(), firstHash);
+
+		canfield.undoLatest();
+		Assert.assertEquals(canfield.hashString(), firstHash);
 	}
 }

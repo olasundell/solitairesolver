@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import se.atrosys.solitaire.card.Card;
 import se.atrosys.solitaire.card.Deck;
 import se.atrosys.solitaire.card.EmptyDeckException;
+import se.atrosys.solitaire.card.move.IllegalMoveException;
 import se.atrosys.solitaire.card.move.Move;
 import se.atrosys.solitaire.card.move.MoveFinder;
 import se.atrosys.solitaire.card.pile.IneligibleCardException;
@@ -17,8 +18,8 @@ import java.util.*;
 // TODO create a builder for this class, it'll be quite heavy in due time.
 public class Canfield {
 	private final MoveFinder moveFinder = new MoveFinder();
-	private Set<Pile> foundations;
-	private Set<Pile> tableaux;
+	private Deque<Pile> foundations;
+	private Deque<Pile> tableaux;
 	private Pile reserve;
 	private Pile stock;
 	private Deck deck = new Deck();
@@ -40,8 +41,8 @@ public class Canfield {
 	}
 
 	private void createPiles() {
-		foundations = new HashSet<>();
-		tableaux = new HashSet<>();
+		foundations = new ArrayDeque<>();
+		tableaux = new ArrayDeque<>();
 		reserve = new Pile(PileType.RESERVE).withName("reserve");
 		stock = new Pile(PileType.STOCK).withName("stock");
 
@@ -134,7 +135,7 @@ public class Canfield {
 		return moves;
 	}
 
-	public Set<Pile> getTableaux() {
+	public Deque<Pile> getTableaux() {
 		return tableaux;
 	}
 
@@ -198,7 +199,7 @@ public class Canfield {
 		return true;
 	}
 
-	protected Set<Pile> getFoundations() {
+	protected Deque<Pile> getFoundations() {
 		return foundations;
 	}
 
@@ -234,8 +235,8 @@ public class Canfield {
 		return builder.toString();
 	}
 
-	public void executeMove(Move move) throws IneligibleCardException {
-		// TODO write fail-safe checks
+	public void executeMove(Move move) throws IneligibleCardException, IllegalMoveException {
+		assertMove(move);
 
 		Pile from = move.getFrom();
 		Pile to = move.getTo();
@@ -248,6 +249,39 @@ public class Canfield {
 		}
 
 		executedMoves.add(move);
+	}
+
+	// TODO move this to a separate delegated class
+	protected void assertMove(Move move) throws IllegalMoveException {
+		if (move.getFrom() == null) {
+			throw new IllegalMoveException("From is null!", move);
+		}
+
+		if (move.getTo() == null) {
+			throw new IllegalMoveException("To is null!", move);
+		}
+
+		if (move.getCard() == null) {
+			throw new IllegalMoveException("Card is null!", move);
+		}
+
+		if (!move.getFrom().getCards().contains(move.getCard())) {
+			throw new IllegalMoveException("Pile which we're about to move from does not contain intended card!", move);
+		}
+
+		if (!foundations.contains(move.getFrom()) &&
+				!tableaux.contains(move.getFrom()) &&
+				stock != move.getFrom() &&
+				reserve != move.getFrom()) {
+			throw new IllegalMoveException("From pile does not exist in current solitaire!", move);
+		}
+
+		if (!foundations.contains(move.getTo()) &&
+				!tableaux.contains(move.getTo()) &&
+				stock != move.getTo() &&
+				reserve != move.getTo()) {
+			throw new IllegalMoveException("To pile does not exist in current solitaire!", move);
+		}
 	}
 
 	/**

@@ -8,7 +8,7 @@ import java.util.*;
 public class Pile {
 	private final PileType pileType;
 	private final List<Card> cards;
-	private String name;
+	private String name = "";
 
 	public Pile(PileType type) {
 		pileType = type;
@@ -104,7 +104,9 @@ public class Pile {
         if (pileType != pile.pileType) { return false; }
 
 		// this is so we avoid problems setting up, because the Set will reject adds otherwise
-		if (cards.isEmpty() && pile.cards.isEmpty() && !name.equals(pile.name)) { return false; }
+		if (cards.isEmpty() && pile.cards.isEmpty()) {
+			if (!name.equals(pile.name)) { return false; }
+		}
 
         if (pileType.isOrdered()) {
             if (!cards.equals(pile.cards)) { return false; }

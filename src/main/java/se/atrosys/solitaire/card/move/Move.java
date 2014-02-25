@@ -46,11 +46,27 @@ public class Move {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(from.toString());
+		if (from == null) {
+			builder.append("null");
+		} else {
+			builder.append(from.toString());
+		}
+
 		builder.append(" -> ");
-		builder.append(card.toString());
+
+		if (card == null) {
+			builder.append("null");
+		} else {
+			builder.append(card.toString());
+		}
+
 		builder.append(" -> ");
-		builder.append(to.toString());
+
+		if (to == null) {
+			builder.append("null");
+		} else {
+			builder.append(to.toString());
+		}
 
 		return builder.toString();
 	}
