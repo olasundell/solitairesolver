@@ -5,7 +5,7 @@ import se.atrosys.solitaire.card.pile.rule.Rule;
 
 import java.util.*;
 
-public class Pile {
+public class Pile implements Cloneable {
 	private final PileType pileType;
 	private final List<Card> cards;
 	private String name = "";
@@ -66,8 +66,24 @@ public class Pile {
 	}
 
 	public String toCardString() {
+		Collection<Card> theseCards;
+
+		if (!pileType.isOrdered()) {
+			theseCards = new TreeSet<>(new Comparator<Card>() {
+				@Override
+				public int compare(Card o1, Card o2) {
+					return o1.compareTo(o2);
+				}
+			});
+
+			theseCards.addAll(cards);
+		} else {
+			theseCards = cards;
+		}
+
 		StringBuilder builder = new StringBuilder();
-		for (Card card: cards) {
+
+		for (Card card: theseCards) {
 			builder.append(card.toString());
 			builder.append(" ");
 		}
@@ -146,5 +162,12 @@ public class Pile {
 
 	public PileType getPileType() {
 		return pileType;
+	}
+
+	public Pile copy() {
+		Pile pile = new Pile(this.pileType);
+		pile.dealCards(this.cards);
+		pile.name = name;
+		return pile;
 	}
 }

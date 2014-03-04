@@ -106,4 +106,43 @@ public class PileTest {
 
         Assert.assertEquals(p1, p2);
     }
+
+	@Test
+	public void toCardStringShouldEqualWhenTrulyUnordered() {
+		Pile p1 = new Pile(PileType.STOCK);
+		Pile p2 = new Pile(PileType.STOCK);
+
+		p1.dealCard(new Card(Suit.CLUBS, 2));
+		p1.dealCard(new Card(Suit.CLUBS, 1));
+		p2.dealCard(new Card(Suit.CLUBS, 1));
+		p2.dealCard(new Card(Suit.CLUBS, 2));
+
+		Assert.assertEquals(p1.toCardString(), p2.toCardString());
+	}
+
+	@Test
+	public void toCardStringShouldEqualWhenOrdered() {
+		Pile p1 = new Pile(PileType.FOUNDATION);
+		Pile p2 = new Pile(PileType.FOUNDATION);
+
+		p1.dealCard(new Card(Suit.CLUBS, 1));
+		p1.dealCard(new Card(Suit.CLUBS, 2));
+		p2.dealCard(new Card(Suit.CLUBS, 1));
+		p2.dealCard(new Card(Suit.CLUBS, 2));
+
+		Assert.assertEquals(p1.toCardString(), p2.toCardString());
+	}
+
+	@Test
+	public void toCardStringShouldNotEqualWhenOrdered() {
+		Pile p1 = new Pile(PileType.FOUNDATION);
+		Pile p2 = new Pile(PileType.FOUNDATION);
+
+		p1.dealCard(new Card(Suit.CLUBS, 2));
+		p1.dealCard(new Card(Suit.CLUBS, 1));
+		p2.dealCard(new Card(Suit.CLUBS, 1));
+		p2.dealCard(new Card(Suit.CLUBS, 2));
+
+		Assert.assertNotEquals(p1.toCardString(), p2.toCardString());
+	}
 }

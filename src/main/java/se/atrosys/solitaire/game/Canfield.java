@@ -31,9 +31,7 @@ public class Canfield {
 		setup();
 	}
 
-	public Canfield() throws EmptyDeckException {
-		setup();
-	}
+	private Canfield() { createPiles(); }
 
 	protected void setup() throws EmptyDeckException {
 		createPiles();
@@ -299,12 +297,31 @@ public class Canfield {
 		Pile from = move.getFrom();
 		Pile to = move.getTo();
 
-		from.addCard(move.getCard());
+		from.dealCard(move.getCard());
 		to.removeCard(move.getCard());
 
 		for (Card follower: move.getFollowers()) {
-			from.addCard(follower);
+			from.dealCard(follower);
 			to.removeCard(follower);
 		}
+	}
+
+	public Canfield copy() {
+		Canfield canfield = new Canfield();
+
+		canfield.tableaux.clear();
+		for (Pile pile: tableaux) {
+			canfield.tableaux.add(pile.copy());
+		}
+
+		canfield.foundations.clear();
+		for (Pile pile: foundations) {
+			canfield.foundations.add(pile.copy());
+		}
+
+		canfield.stock = this.stock.copy();
+		canfield.reserve = this.reserve.copy();
+
+		return canfield;
 	}
 }

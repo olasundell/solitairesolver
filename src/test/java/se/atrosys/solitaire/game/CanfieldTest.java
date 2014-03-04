@@ -12,7 +12,6 @@ import se.atrosys.solitaire.card.Suit;
 import se.atrosys.solitaire.card.pile.IneligibleCardException;
 import se.atrosys.solitaire.card.pile.Pile;
 import se.atrosys.solitaire.card.pile.PileType;
-import se.atrosys.solitaire.card.pile.rule.PileComparator;
 
 import java.util.*;
 
@@ -22,7 +21,7 @@ public class CanfieldTest {
 
 	@BeforeMethod
 	public void setup() throws Exception {
-		 canfield = new Canfield();
+		 canfield = new CanfieldBuilder().createCanfield();
 	}
 
 	@Test
@@ -130,7 +129,7 @@ public class CanfieldTest {
 		int duplicates = 0;
 
 		for (long i = 0 ; i < 1000000 ; i++) {
-			Canfield c = new Canfield(i);
+			Canfield c = new CanfieldBuilder().setRandseed(i).createCanfield();
 			String key = c.hashString();
 
 			if (i % 10000 == 0) {
@@ -178,10 +177,17 @@ public class CanfieldTest {
 
 	@Test
 	public void executeMove() throws IneligibleCardException, IllegalMoveException {
+		String firstHash = canfield.hashString();
 		Set<Move> moves = canfield.getAvailableMoves();
 		Move move = moves.iterator().next();
 
+		Assert.assertTrue(move.getFrom().getCards().contains(move.getCard()));
+		Assert.assertFalse(move.getTo().getCards().contains(move.getCard()));
+
 		canfield.executeMove(move);
+		Assert.assertNotEquals(canfield.hashString(), firstHash);
+		Assert.assertFalse(move.getFrom().getCards().contains(move.getCard()));
+		Assert.assertTrue(move.getTo().getCards().contains(move.getCard()));
 	}
 
 	@Test
@@ -195,5 +201,12 @@ public class CanfieldTest {
 
 		canfield.undoLatest();
 		Assert.assertEquals(canfield.hashString(), firstHash);
+	}
+
+	@Test
+	public void copyShouldReturnEqualButNotSame() {
+		Canfield copy = canfield.copy();
+		Assert.assertFalse(copy == canfield);
+		Assert.assertEquals(copy.hashString(), canfield.hashString());
 	}
 }

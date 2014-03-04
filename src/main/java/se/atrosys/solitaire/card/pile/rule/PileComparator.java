@@ -28,13 +28,7 @@ public class PileComparator implements Comparator<Pile> {
 			Card o1C = o1Cards.get(0);
 			Card o2C = o2Cards.get(0);
 
-			if (o1C.getSuit() == o2C.getSuit()) {
-				return o1C.getRank() - o2C.getRank();
-			}
-
-			List<Suit> suits = Arrays.asList(Suit.values());
-
-			return suits.indexOf(o1C.getSuit()) - suits.indexOf(o2C.getSuit());
+			return o1C.compareTo(o2C);
 		} else {
 			return o1Cards.size() - o2Cards.size();
 		}

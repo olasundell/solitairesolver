@@ -1,6 +1,9 @@
 package se.atrosys.solitaire.card;
 
-public class Card {
+import java.util.Arrays;
+import java.util.List;
+
+public class Card implements Comparable<Card> {
 	private final Suit suit;
 	private final int rank;
 
@@ -60,5 +63,16 @@ public class Card {
 		if (suit != card.suit) return false;
 
 		return true;
+	}
+
+	@Override
+	public int compareTo(Card o) {
+		if (getSuit() == o.getSuit()) {
+			return getRank() - o.getRank();
+		}
+
+		List<Suit> suits = Arrays.asList(Suit.values());
+
+		return suits.indexOf(o.getSuit()) - suits.indexOf(getSuit());
 	}
 }

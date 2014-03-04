@@ -1,5 +1,7 @@
 package se.atrosys.solitaire;
 
+import se.atrosys.solitaire.game.Canfield;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,22 +19,22 @@ public class NTree {
         // TODO this needs some serious thought.
     }
 
-    private static class Node {
-        private final Integer checksum;
-        private final Game game;
+    public static class Node {
+        private String checksum;
+        private final Canfield canfield;
         private final List<Node> nodes = new ArrayList<>();
 
-        private Node(Game game) {
-            this.game = game;
-            checksum = game.hashCode();
+        private Node(Canfield canfield) {
+            this.canfield= canfield;
+            checksum = canfield.hashString();
         }
 
-        public Integer getChecksum() {
+        public String getChecksum() {
             return checksum;
         }
 
-        public Game getGame() {
-            return game;
+        public Canfield getGame() {
+            return canfield;
         }
 
         public boolean isEmpty() {
