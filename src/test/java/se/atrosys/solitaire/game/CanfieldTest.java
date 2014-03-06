@@ -20,7 +20,7 @@ public class CanfieldTest {
 	private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@BeforeMethod
-	public void setup() throws Exception {
+	public void setup() throws Exception, EmptyDeckException {
 		 canfield = new CanfieldBuilder().createCanfield();
 	}
 

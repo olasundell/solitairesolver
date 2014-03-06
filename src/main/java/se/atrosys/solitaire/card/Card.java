@@ -33,6 +33,7 @@ public class Card implements Comparable<Card> {
 			break;
 		default:
 			builder.append(rank);
+			break;
 		}
 
 		builder.append(suit.shortName());
@@ -63,6 +64,13 @@ public class Card implements Comparable<Card> {
 		if (suit != card.suit) return false;
 
 		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = suit.hashCode();
+		result = 31 * result + rank;
+		return result;
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package se.atrosys.solitaire.card.pile;
 
-public class IneligibleCardException extends Throwable {
+import se.atrosys.solitaire.SolitaireException;
+
+public class IneligibleCardException extends SolitaireException {
 	public IneligibleCardException(String s) {
 		super(s);
 	}

@@ -1,4 +1,9 @@
 package se.atrosys.solitaire.card;
 
-public class EmptyDeckException extends Exception {
+import se.atrosys.solitaire.SolitaireException;
+
+public class EmptyDeckException extends SolitaireException {
+	public EmptyDeckException(String s) {
+		super(s);
+	}
 }

@@ -27,7 +27,7 @@ public class Deck {
 
 	public Card takeNext() throws EmptyDeckException {
 		if (cards.isEmpty()) {
-			throw new EmptyDeckException();
+			throw new EmptyDeckException("Deck is empty when it shouldn't be!");
 		}
 
 		return cards.remove(random.nextInt(cards.size()));

@@ -24,7 +24,7 @@ public class Game {
 	public Game() {
 	}
 
-	public void playGame(int randseed) throws EmptyDeckException, IneligibleCardException, IllegalMoveException {
+	public void playGame(int randseed) throws SolitaireException {
 		Canfield canfield = new CanfieldBuilder().setRandseed(randseed).createCanfield();
 		Node<Canfield> node = new Node<>(canfield);
 		nodes.put(node.getChecksum(), node);
@@ -83,7 +83,7 @@ public class Game {
 			if (game.solutionFound()) {
 				logger.info("Found solution for randseed {}", 2);
 			}
-		} catch (EmptyDeckException | IneligibleCardException | IllegalMoveException e) {
+		} catch (SolitaireException e) {
 			logger.error("Ooops", e);
 		}
 	}
