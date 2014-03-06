@@ -26,7 +26,7 @@ public class CanfieldTest {
 
 	@Test
 	public void availableMovesShouldNotBeNull() {
-		Set<Move> moves = canfield.getAvailableMoves();
+		Set<Move> moves = canfield.getNormalMoves();
 
 		Assert.assertNotNull(moves);
 		for (Move move: moves) {
@@ -53,29 +53,6 @@ public class CanfieldTest {
 		Assert.assertEquals(2, moves.size());
 	}
 
-	@Test(enabled = false)
-	public void shouldPruneFoundationMoves() {
-		// We know we'll only have one ace to move to an empty foundation.
-		Set<Move> moves = canfield.getAvailableMoves();
-
-		Set<Move> prunedMoves = canfield.pruneMovesToFoundations(moves);
-
-		Assert.assertNotNull(prunedMoves);
-		Assert.assertFalse(prunedMoves.isEmpty());
-
-		int numberOfFoundationMoves = 0;
-
-		for (Move move: prunedMoves) {
-			for (Pile foundation: canfield.getFoundations()) {
-				if (move.getTo().equals(foundation)) {
-					numberOfFoundationMoves++;
-				}
-			}
-		}
-
-		Assert.assertEquals(1, numberOfFoundationMoves);
-	}
-
 	@Test
 	public void shouldOnlyFindOneMoveFromReserveToTableauxWhenTableauxEmpty() {
 		Deque<Pile> tableaux = canfield.getTableaux();
@@ -84,7 +61,7 @@ public class CanfieldTest {
 		// TODO this puts the whole solitaire in a broken state, find a better way to generate an empty tableaux
 		tabArr[0].clear();
 
-		Set<Move> moves = canfield.getAvailableMoves();
+		Set<Move> moves = canfield.getNormalMoves();
 
 		Assert.assertEquals(moves.size(), 1);
 	}
@@ -178,7 +155,7 @@ public class CanfieldTest {
 	@Test
 	public void executeMove() throws IneligibleCardException, IllegalMoveException {
 		String firstHash = canfield.hashString();
-		Set<Move> moves = canfield.getAvailableMoves();
+		Set<Move> moves = canfield.getNormalMoves();
 		Move move = moves.iterator().next();
 
 		Assert.assertTrue(move.getFrom().getCards().contains(move.getCard()));
@@ -193,7 +170,7 @@ public class CanfieldTest {
 	@Test
 	public void moveAndUndoShouldResultInOriginalState() throws IneligibleCardException, IllegalMoveException {
 		String firstHash = canfield.hashString();
-		Set<Move> moves = canfield.getAvailableMoves();
+		Set<Move> moves = canfield.getNormalMoves();
 		Move move = moves.iterator().next();
 
 		canfield.executeMove(move);
@@ -208,5 +185,14 @@ public class CanfieldTest {
 		Canfield copy = canfield.copy();
 		Assert.assertFalse(copy == canfield);
 		Assert.assertEquals(copy.hashString(), canfield.hashString());
+	}
+
+	@Test
+	public void copyShouldIncludeMoves() throws IneligibleCardException, IllegalMoveException {
+		canfield.executeMove(canfield.getNormalMoves().iterator().next());
+		Canfield copy = canfield.copy();
+		Assert.assertFalse(copy == canfield);
+		Assert.assertEquals(copy.hashString(), canfield.hashString());
+		Assert.assertEquals(copy.getExecutedMoves().size(), 1);
 	}
 }
