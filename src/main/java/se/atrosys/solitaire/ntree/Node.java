@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Node<T extends Solitaire> {
-	private String checksum;
+	private final String checksum;
 	private final T data;
 	private final List<Node<T>> nodes = new ArrayList<>();
 

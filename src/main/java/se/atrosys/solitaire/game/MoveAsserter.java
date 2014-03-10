@@ -4,14 +4,14 @@ import se.atrosys.solitaire.card.move.IllegalMoveException;
 import se.atrosys.solitaire.card.move.Move;
 import se.atrosys.solitaire.card.pile.Pile;
 
-public class MoveAsserter {
+class MoveAsserter {
 	private final Canfield canfield;
 
 	public MoveAsserter(Canfield canfield) {
 		this.canfield = canfield;
 	}
 
-	protected void assertMove(Move move) throws IllegalMoveException {
+	void assertMove(Move move) throws IllegalMoveException {
 		Pile from = move.getFrom();
 		Pile to = move.getTo();
 

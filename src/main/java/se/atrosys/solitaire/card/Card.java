@@ -1,6 +1,7 @@
 package se.atrosys.solitaire.card;
 
 import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.List;
 
 public class Card implements Comparable<Card> {
@@ -10,6 +11,55 @@ public class Card implements Comparable<Card> {
 	public Card(Suit suit, int rank) {
 		this.suit = suit;
 		this.rank = rank;
+	}
+
+	public Card(String s) {
+		if (s.length() != 2) {
+			throw new InputMismatchException(String.format("%s is not a valid card!", s));
+		}
+
+		switch (s.charAt(0)) {
+		case 'A':
+			rank = 1;
+			break;
+		case 'K':
+			rank = 13;
+			break;
+		case 'Q':
+			rank = 12;
+			break;
+		case 'J':
+			rank = 11;
+			break;
+		case 'T':
+			rank = 10;
+			break;
+		default:
+			rank = Character.getNumericValue(s.charAt(0));
+
+			if (rank > 13 || rank < 1) {
+				throw new InputMismatchException(String.format("%s is not a valid card!", s));
+			}
+
+			break;
+		}
+
+		switch (s.charAt(1)) {
+		case 'S':
+			suit = Suit.SPADES;
+			break;
+		case 'H':
+			suit = Suit.HEARTS;
+			break;
+		case 'D':
+			suit = Suit.DIAMONDS;
+			break;
+		case 'C':
+			suit = Suit.CLUBS;
+			break;
+		default:
+			throw new InputMismatchException(String.format("%s is not a valid card!", s));
+		}
 	}
 
 	public String toString() {

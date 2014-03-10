@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CanfieldMoveFinder {
+class CanfieldMoveFinder {
 	private final Canfield canfield;
 	private final MoveFinder moveFinder = new MoveFinder();
 
@@ -64,8 +64,8 @@ public class CanfieldMoveFinder {
 		return movesWithoutExecuted;
 	}
 
-	protected Set<Move> getTableauInternalMoves() {
-		Set<Move> moves = new HashSet<Move>();
+	Set<Move> getTableauInternalMoves() {
+		Set<Move> moves = new HashSet<>();
 		Pile[] piles = canfield.getTableaux().toArray(new Pile[canfield.getTableaux().size()]);
 
 		for (int i = 0; i < piles.length; i++) {
@@ -80,8 +80,8 @@ public class CanfieldMoveFinder {
 		return moves;
 	}
 
-	protected List<Move> getTableauExternalMoves() {
-		List<Move> moves = new ArrayList<Move>();
+	List<Move> getTableauExternalMoves() {
+		List<Move> moves = new ArrayList<>();
 
 		for (Pile tableau : canfield.getTableaux()) {
 			for (Pile foundation : canfield.getFoundations()) {
@@ -92,8 +92,8 @@ public class CanfieldMoveFinder {
 		return moves;
 	}
 
-	protected List<Move> getReserveMoves() {
-		ArrayList<Move> moves = new ArrayList<Move>();
+	List<Move> getReserveMoves() {
+		ArrayList<Move> moves = new ArrayList<>();
 		for (Pile tableau : canfield.getTableaux()) {
 			moves.addAll(moveFinder.getMovesFromPiles(canfield.getReserve(), tableau));
 		}
@@ -105,8 +105,8 @@ public class CanfieldMoveFinder {
 		return moves;
 	}
 
-	protected List<Move> getStockMoves() {
-		ArrayList<Move> moves = new ArrayList<Move>();
+	List<Move> getStockMoves() {
+		ArrayList<Move> moves = new ArrayList<>();
 		for (Pile tableau : canfield.getTableaux()) {
 			moves.addAll(moveFinder.getMovesFromPiles(canfield.getStock(), tableau));
 		}

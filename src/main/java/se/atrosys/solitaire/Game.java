@@ -2,7 +2,6 @@ package se.atrosys.solitaire;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.atrosys.solitaire.card.EmptyDeckException;
 import se.atrosys.solitaire.card.move.IllegalMoveException;
 import se.atrosys.solitaire.card.move.Move;
 import se.atrosys.solitaire.card.pile.IneligibleCardException;
@@ -16,15 +15,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class Game {
-	Map<String, Node> nodes = new HashMap<>();
-	Set<Solitaire> solutions = new HashSet<>();
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+class Game {
+	private final Map<String, Node> nodes = new HashMap<>();
+	private final Set<Solitaire> solutions = new HashSet<>();
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public Game() {
+	private Game() {
 	}
 
-	public void playGame(int randseed) throws SolitaireException {
+	void playGame(int randseed) throws SolitaireException {
 		Canfield canfield = new CanfieldBuilder().setRandseed(randseed).createCanfield();
 		Node<Canfield> node = new Node<>(canfield);
 		nodes.put(node.getChecksum(), node);
@@ -32,11 +31,11 @@ public class Game {
 		generateNode(canfield, node, 0);
 	}
 
-	public boolean solutionFound() {
+	boolean solutionFound() {
 		return !solutions.isEmpty();
 	}
 
-	protected void generateNode(Canfield canfield, Node<Canfield> node, int count) throws IneligibleCardException, IllegalMoveException {
+	void generateNode(Canfield canfield, Node<Canfield> node, int count) throws IneligibleCardException, IllegalMoveException {
 		if (count == 500) {
 			logger.info("500");
 			return;

@@ -16,7 +16,7 @@ import se.atrosys.solitaire.card.pile.PileType;
 import java.util.*;
 
 public class CanfieldTest {
-	Canfield canfield;
+	private Canfield canfield;
 	private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@BeforeMethod

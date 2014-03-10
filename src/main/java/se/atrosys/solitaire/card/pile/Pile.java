@@ -69,12 +69,7 @@ public class Pile implements Cloneable {
 		Collection<Card> theseCards;
 
 		if (!pileType.isOrdered()) {
-			theseCards = new TreeSet<>(new Comparator<Card>() {
-				@Override
-				public int compare(Card o1, Card o2) {
-					return o1.compareTo(o2);
-				}
-			});
+			theseCards = new TreeSet<>((o1, o2) -> o1.compareTo(o2));
 
 			theseCards.addAll(cards);
 		} else {

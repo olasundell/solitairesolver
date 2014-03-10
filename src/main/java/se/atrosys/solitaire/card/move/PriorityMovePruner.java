@@ -46,7 +46,7 @@ public class PriorityMovePruner {
 		return pruned;
 	}
 
-	protected Set<Move> pruneAcesToFoundations(Set<Move> moves) {
+	Set<Move> pruneAcesToFoundations(Set<Move> moves) {
 		Set<Move> pruned = new HashSet<>();
 
 		Set<Card> aces = new LinkedHashSet<>();
@@ -77,7 +77,7 @@ public class PriorityMovePruner {
 		return pruned;
 	}
 
-	protected Set<Move> pruneFoundation(Move move) {
+	Set<Move> pruneFoundation(Move move) {
 		Set<Move> moves = new HashSet<>();
 
 		if (move.getTo().getPileType() == PileType.FOUNDATION) {

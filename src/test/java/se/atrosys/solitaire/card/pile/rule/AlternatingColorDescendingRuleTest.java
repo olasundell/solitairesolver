@@ -6,7 +6,7 @@ import se.atrosys.solitaire.card.Card;
 import se.atrosys.solitaire.card.Suit;
 
 public class AlternatingColorDescendingRuleTest {
-	AlternatingColorDescendingRule rule = new AlternatingColorDescendingRule();
+	private final AlternatingColorDescendingRule rule = new AlternatingColorDescendingRule();
 
 	@Test
 	public void differentColorsAndAdjacentNumbersShouldWork() throws Exception {

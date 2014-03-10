@@ -17,7 +17,6 @@ import java.util.*;
 
 // TODO create a builder for this class, it'll be quite heavy in due time - job started, needs to be finished.
 public class Canfield implements Solitaire {
-	private final MoveFinder moveFinder = new MoveFinder();
 	private final CanfieldMoveFinder canfieldMoveFinder = new CanfieldMoveFinder(this);
 	private final MoveAsserter moveAsserter = new MoveAsserter(this);
 	private Deque<Pile> foundations;
@@ -25,17 +24,17 @@ public class Canfield implements Solitaire {
 	private Pile reserve;
 	private Pile stock;
 	private Deck deck = new Deck();
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	private Queue<Move> executedMoves = new ArrayDeque<>();
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Queue<Move> executedMoves = new ArrayDeque<>();
 
-	protected Canfield(long randseed) throws EmptyDeckException {
+	Canfield(long randseed) throws EmptyDeckException {
 		deck = new Deck(randseed);
 		setup();
 	}
 
 	private Canfield() { createPiles(); }
 
-	protected void setup() throws EmptyDeckException {
+	void setup() throws EmptyDeckException {
 		createPiles();
 		dealCards();
 	}
@@ -75,7 +74,7 @@ public class Canfield implements Solitaire {
 		return canfieldMoveFinder.getNormalMoves();
 	}
 
-	protected Set<Move> getTableauInternalMoves() {
+	Set<Move> getTableauInternalMoves() {
 		return canfieldMoveFinder.getTableauInternalMoves();
 	}
 
@@ -122,11 +121,11 @@ public class Canfield implements Solitaire {
 		return true;
 	}
 
-	protected Deque<Pile> getFoundations() {
+	Deque<Pile> getFoundations() {
 		return foundations;
 	}
 
-	protected Pile getStock() {
+	Pile getStock() {
 		return stock;
 	}
 
@@ -166,7 +165,11 @@ public class Canfield implements Solitaire {
 		Pile from = move.getFrom();
 		Pile to = move.getTo();
 		from.removeCard(move.getCard());
-		to.addCard(move.getCard());
+		try {
+			to.addCard(move.getCard());
+		} catch (IneligibleCardException e) {
+			throw new IneligibleCardException(this.hashString(),e);
+		}
 
 		for (Card follower: move.getFollowers()) {
 			from.removeCard(follower);
@@ -177,7 +180,7 @@ public class Canfield implements Solitaire {
 	}
 
 	// TODO move this to a separate delegated class
-	protected void assertMove(Move move) throws IllegalMoveException {
+	void assertMove(Move move) throws IllegalMoveException {
 
 		moveAsserter.assertMove(move);
 	}
@@ -187,7 +190,7 @@ public class Canfield implements Solitaire {
 	 * @throws IneligibleCardException
 	 */
 
-	public void undoLatest() throws IneligibleCardException {
+	public void undoLatest() {
 		// TODO rewrite this in a way more robust manner
 		if (executedMoves.isEmpty()) {
 			return;
@@ -227,9 +230,8 @@ public class Canfield implements Solitaire {
 		return canfield;
 	}
 
-	protected Queue<Move> getExecutedMoves() {
-		Queue<Move> ret = new ArrayDeque<>(executedMoves);
-		return ret;
+	Queue<Move> getExecutedMoves() {
+		return new ArrayDeque<>(executedMoves);
 	}
 
 	public Pile getReserve() {

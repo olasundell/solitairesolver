@@ -16,8 +16,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class PriorityMovePrunerTest {
-	Canfield canfield;
-	Set<Move> moves;
+	private Canfield canfield;
+	private Set<Move> moves;
 	private PriorityMovePruner pruner;
 
 	@BeforeMethod
@@ -32,7 +32,7 @@ public class PriorityMovePrunerTest {
 		Set<Move> prunedMoves = pruner.pruneMoves(moves, 0);
 
 		Assert.assertNotNull(prunedMoves);
-		Assert.assertEquals(prunedMoves.size(), 1);
+		Assert.assertEquals(prunedMoves.size(), 4);
 	}
 
 	@Test

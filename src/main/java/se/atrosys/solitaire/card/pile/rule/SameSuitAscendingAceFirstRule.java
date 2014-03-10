@@ -4,7 +4,7 @@ import org.slf4j.LoggerFactory;
 import se.atrosys.solitaire.card.Card;
 
 public class SameSuitAscendingAceFirstRule implements Rule {
-	private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public boolean eligible(Card existing, Card intended) {

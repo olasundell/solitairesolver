@@ -6,7 +6,7 @@ import se.atrosys.solitaire.card.Card;
 import se.atrosys.solitaire.card.Suit;
 
 public class SameSuitAscendingAceFirstRuleTest {
-	SameSuitAscendingAceFirstRule rule = new SameSuitAscendingAceFirstRule();
+	private final SameSuitAscendingAceFirstRule rule = new SameSuitAscendingAceFirstRule();
 
 	@Test
 	public void differentSuitsAndAdjacentNumbersShouldNotWork() throws Exception {

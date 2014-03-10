@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.Random;
 
 public class Deck {
-	final List<Card> cards = new ArrayList<>();
+	private final List<Card> cards = new ArrayList<>();
 	private Random random = new Random(0);
 
 	public Deck() {
 		setup();
 	}
 
-	protected void setup() {
+	void setup() {
 		for (Suit suit: Suit.values()) {
 			for (int i = 1 ; i <= 13 ; i++) {
 				cards.add(new Card(suit, i));

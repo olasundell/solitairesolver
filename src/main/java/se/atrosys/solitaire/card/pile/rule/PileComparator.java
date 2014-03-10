@@ -1,10 +1,8 @@
 package se.atrosys.solitaire.card.pile.rule;
 
 import se.atrosys.solitaire.card.Card;
-import se.atrosys.solitaire.card.Suit;
 import se.atrosys.solitaire.card.pile.Pile;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 

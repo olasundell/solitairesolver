@@ -79,7 +79,7 @@ public class Move {
 		Move move = (Move) o;
 
 		if (card != null ? !card.equals(move.card) : move.card != null) return false;
-		if (followers != null ? !followers.equals(move.followers) : move.followers != null) return false;
+		if (!followers.equals(move.followers)) return false;
 		if (from != null ? !from.equals(move.from) : move.from != null) return false;
 		if (to != null ? !to.equals(move.to) : move.to != null) return false;
 
@@ -91,7 +91,7 @@ public class Move {
 		int result = from != null ? from.hashCode() : 0;
 		result = 31 * result + (to != null ? to.hashCode() : 0);
 		result = 31 * result + (card != null ? card.hashCode() : 0);
-		result = 31 * result + (followers != null ? followers.hashCode() : 0);
+		result = 31 * result + (followers.hashCode());
 		return result;
 	}
 }
