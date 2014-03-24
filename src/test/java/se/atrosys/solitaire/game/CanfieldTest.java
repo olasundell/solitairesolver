@@ -195,4 +195,23 @@ public class CanfieldTest {
 		Assert.assertEquals(copy.hashString(), canfield.hashString());
 		Assert.assertEquals(copy.getExecutedMoves().size(), 1);
 	}
+
+	@Test
+	public void executedMovesShouldBePrunedFromAvailableMoves() throws IneligibleCardException, IllegalMoveException {
+		Set<Move> moves = null;
+
+		for (int i = 0 ; i < 30 ; i++) {
+			if (i == 19) {
+				int j = 0;
+				j++;
+			}
+			moves = canfield.getNormalMoves();
+			if (moves.size() == 0) {
+				break;
+			}
+			canfield.executeMove(moves.iterator().next());
+		}
+
+		Assert.assertNotNull(moves);
+	}
 }

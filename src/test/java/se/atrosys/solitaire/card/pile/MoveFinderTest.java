@@ -182,6 +182,21 @@ public class MoveFinderTest {
 	}
 
 	@Test
+	public void shouldBeTopOnlyToFoundation() {
+		first = new Pile(PileType.TABLEAU);
+		first.dealCard(new Card("4H"));
+		first.dealCard(new Card("3S"));
+
+		second = new Pile(PileType.FOUNDATION);
+		second.dealCard(new Card("AH"));
+		second.dealCard(new Card("2H"));
+		second.dealCard(new Card("3H"));
+
+		Assert.assertEquals(moveFinder.getMovesFromPiles(first, second).size(), 0);
+		Assert.assertEquals(moveFinder.getMovesFromPiles(second, first).size(), 0);
+	}
+
+	@Test
 	public void shouldFindAllMovesFromStockToFoundation() {
 		Pile stock = new Pile(PileType.STOCK);
 		Pile foundation = new Pile(PileType.FOUNDATION);
@@ -197,6 +212,6 @@ public class MoveFinderTest {
 		List<Move> moves = moveFinder.getMovesFromPiles(stock, foundation);
 
 		Assert.assertNotNull(moves);
-		Assert.assertNotEquals(moves.size(), 0);
+		Assert.assertNotEquals(moves.size(), 0, "There should be moves, damnit.");
 	}
 }

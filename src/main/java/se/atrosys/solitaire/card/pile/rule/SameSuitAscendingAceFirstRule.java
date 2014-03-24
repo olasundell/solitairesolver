@@ -30,4 +30,9 @@ public class SameSuitAscendingAceFirstRule implements Rule {
 
 		return true;
 	}
+
+	@Override
+	public boolean canBuildOnTop() {
+		return false;
+	}
 }

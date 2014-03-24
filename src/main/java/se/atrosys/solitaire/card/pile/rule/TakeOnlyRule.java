@@ -7,4 +7,9 @@ public class TakeOnlyRule implements Rule {
 	public boolean eligible(Card existing, Card intended) {
 		return false;
 	}
+
+	@Override
+	public boolean canBuildOnTop() {
+		return false;
+	}
 }

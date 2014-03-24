@@ -25,4 +25,9 @@ public class AlternatingColorDescendingRule implements Rule {
 
 		return true;
 	}
+
+	@Override
+	public boolean canBuildOnTop() {
+		return true;
+	}
 }

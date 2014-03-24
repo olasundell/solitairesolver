@@ -14,17 +14,15 @@ public class MoveFinder {
 	public List<Move> getMovesFromPiles(Pile firstPile, Pile secondPile) {
 		Set<Move> moves = new HashSet<>();
 
-		// TODO this needs a generalisation rewrite, code reuse is deplorable.
 		// TODO this code generates a whole lot of duplicates, which is rather inelegantly handled by the Set we're using.
 
-		// FIXME this -must- handle Pile.topOnly()
-		if (firstPile.isTopOnly()) {
+		if (firstPile.isTopOnly() || (secondPile.isTopOnly() && firstPile.getRule().canBuildOnTop())) {
 			moves.addAll(topMove(firstPile, secondPile));
 		} else {
 			moves.addAll(iterate(firstPile, secondPile));
 		}
 
-		if (secondPile.isTopOnly()) {
+		if (secondPile.isTopOnly() || (firstPile.isTopOnly() && secondPile.getRule().canBuildOnTop())) {
 			moves.addAll(topMove(secondPile, firstPile));
 		} else {
 			moves.addAll(iterate(secondPile, firstPile));
@@ -61,7 +59,7 @@ public class MoveFinder {
 			if (rule.eligible(secondCard, firstCard)) {
 				Move move = new Move(firstPile, secondPile, firstCard);
 
-				if (firstPile.getPileType() == PileType.TABLEAU) {
+				if (firstPile.getPileType() == PileType.TABLEAU && secondPile.getPileType().getRule().canBuildOnTop()) {
 					List<Card> followers = firstPileCards.subList(k + 1, firstPileCards.size());
 					move = move.withFollowers(followers);
 				}

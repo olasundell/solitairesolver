@@ -4,6 +4,7 @@ import se.atrosys.solitaire.card.move.Move;
 import se.atrosys.solitaire.card.move.MoveFinder;
 import se.atrosys.solitaire.card.move.PriorityMovePruner;
 import se.atrosys.solitaire.card.pile.Pile;
+import se.atrosys.solitaire.card.pile.PileType;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,7 +39,6 @@ class CanfieldMoveFinder {
 	public Set<Move> getNormalMoves() {
 		Set<Move> moves = new HashSet<>();
 
-		// TODO if any of the tableaus are empty, then there can be only one move, which is reserve -> empty tableau
 		for (Pile tableau: canfield.getTableaux()) {
 			if (tableau.isEmpty() && !canfield.getReserve().isEmpty()) {
 				moves.add(new Move(canfield.getReserve(), tableau, canfield.getReserve().peek()));
@@ -51,6 +51,22 @@ class CanfieldMoveFinder {
 		moves.addAll(getReserveMoves());
 		moves.addAll(getStockMoves());
 
+		return pruneMovesFromFoundations(pruneExecutedMoves(moves));
+	}
+
+	private Set<Move> pruneMovesFromFoundations(Set<Move> moves) {
+		Set<Move> pruned = new HashSet<>();
+
+		for (Move move: moves) {
+			if (move.getFrom().getPileType() != PileType.FOUNDATION) {
+				pruned.add(move);
+			}
+		}
+
+		return pruned;
+	}
+
+	protected Set<Move> pruneExecutedMoves(Set<Move> moves) {
 		Set<Move> movesWithoutExecuted = new HashSet<>(moves);
 
 		for (Move executed: canfield.getExecutedMoves()) {
@@ -60,7 +76,6 @@ class CanfieldMoveFinder {
 				}
 			}
 		}
-
 		return movesWithoutExecuted;
 	}
 
